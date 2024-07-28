@@ -1,0 +1,4 @@
+
+ - [ ] handle input
+ - [ ] handle windows size
+ - [ ] use multiple figlet fonts and UTF8 chars

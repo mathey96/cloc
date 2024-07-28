@@ -42,6 +42,118 @@ clear_prev_screen(struct ncplane* plane){
 	}
 }
 
+int calculate_offset(int digit_1, int digit_2){
+	if(
+		digit_1 == 0 && digit_2 == 0 ||
+		digit_1 == 0 && digit_2 == 1 ||
+		digit_1 == 0 && digit_2 == 2 ||
+		digit_1 == 0 && digit_2 == 3 ||
+		digit_1 == 0 && digit_2 == 4 ||
+		digit_1 == 0 && digit_2 == 5 ||
+		digit_1 == 0 && digit_2 == 6 ||
+		digit_1 == 0 && digit_2 == 7 ||
+		digit_1 == 0 && digit_2 == 8 ||
+		digit_1 == 0 && digit_2 == 9 ||
+		digit_1 == 0 && digit_2 == 0 ||
+		digit_1 == 2 && digit_2 == 0 ||
+		digit_1 == 2 && digit_2 == 2 ||
+		digit_1 == 2 && digit_2 == 3 ||
+		digit_1 == 2 && digit_2 == 5 ||
+		digit_1 == 2 && digit_2 == 6 ||
+		digit_1 == 2 && digit_2 == 7 ||
+		digit_1 == 2 && digit_2 == 8 ||
+		digit_1 == 2 && digit_2 == 9 ||
+		digit_1 == 3 && digit_2 == 0 ||
+		digit_1 == 3 && digit_2 == 1 ||
+		digit_1 == 3 && digit_2 == 2 ||
+		digit_1 == 3 && digit_2 == 3 ||
+		digit_1 == 3 && digit_2 == 5 ||
+		digit_1 == 3 && digit_2 == 6 ||
+		digit_1 == 3 && digit_2 == 7 ||
+		digit_1 == 3 && digit_2 == 8 ||
+		digit_1 == 3 && digit_2 == 9 ||
+		digit_1 == 5 && digit_2 == 0 ||
+		digit_1 == 5 && digit_2 == 1 ||
+		digit_1 == 5 && digit_2 == 2 ||
+		digit_1 == 5 && digit_2 == 3 ||
+		digit_1 == 5 && digit_2 == 4 ||
+		digit_1 == 5 && digit_2 == 5 ||
+		digit_1 == 5 && digit_2 == 6 ||
+		digit_1 == 5 && digit_2 == 7 ||
+		digit_1 == 5 && digit_2 == 8 ||
+		digit_1 == 5 && digit_2 == 9 ||
+		digit_1 == 6 && digit_2 == 0 ||
+		digit_1 == 6 && digit_2 == 1 ||
+		digit_1 == 6 && digit_2 == 2 ||
+		digit_1 == 6 && digit_2 == 3 ||
+		digit_1 == 6 && digit_2 == 4 ||
+		digit_1 == 6 && digit_2 == 5 ||
+		digit_1 == 6 && digit_2 == 6 ||
+		digit_1 == 6 && digit_2 == 7 ||
+		digit_1 == 6 && digit_2 == 8 ||
+		digit_1 == 6 && digit_2 == 9 ||
+		digit_1 == 7 && digit_2 == 0 ||
+		digit_1 == 7 && digit_2 == 1 ||
+		digit_1 == 7 && digit_2 == 2 ||
+		digit_1 == 7 && digit_2 == 3 ||
+		digit_1 == 7 && digit_2 == 4 ||
+		digit_1 == 7 && digit_2 == 5 ||
+		digit_1 == 7 && digit_2 == 6 ||
+		digit_1 == 7 && digit_2 == 7 ||
+		digit_1 == 7 && digit_2 == 8 ||
+		digit_1 == 7 && digit_2 == 9 ||
+		digit_1 == 8 && digit_2 == 0 ||
+		digit_1 == 8 && digit_2 == 1 ||
+		digit_1 == 8 && digit_2 == 2 ||
+		digit_1 == 8 && digit_2 == 3 ||
+		digit_1 == 8 && digit_2 == 4 ||
+		digit_1 == 8 && digit_2 == 5 ||
+		digit_1 == 8 && digit_2 == 6 ||
+		digit_1 == 8 && digit_2 == 7 ||
+		digit_1 == 8 && digit_2 == 8 ||
+		digit_1 == 8 && digit_2 == 9 ||
+		digit_1 == 9 && digit_2 == 0 ||
+		digit_1 == 9 && digit_2 == 1 ||
+		digit_1 == 9 && digit_2 == 2 ||
+		digit_1 == 9 && digit_2 == 3 ||
+		digit_1 == 9 && digit_2 == 4 ||
+		digit_1 == 9 && digit_2 == 5 ||
+		digit_1 == 9 && digit_2 == 6 ||
+		digit_1 == 9 && digit_2 == 7 ||
+		digit_1 == 9 && digit_2 == 8 ||
+		digit_1 == 9 && digit_2 == 9)
+			return 7;
+	else if(digit_1 == 2 && digit_2 == 1 ||
+		digit_1 == 2 && digit_2 == 4 ||
+		digit_1 == 3 && digit_2 == 4 ||
+		digit_1 == 4 && digit_2 == 0 ||
+		digit_1 == 4 && digit_2 == 1 ||
+		digit_1 == 4 && digit_2 == 2 ||
+		digit_1 == 4 && digit_2 == 3 ||
+		digit_1 == 4 && digit_2 == 4 ||
+		digit_1 == 4 && digit_2 == 5 ||
+		digit_1 == 4 && digit_2 == 6 ||
+		digit_1 == 4 && digit_2 == 7 ||
+		digit_1 == 4 && digit_2 == 8 ||
+		digit_1 == 4 && digit_2 == 9)
+			return 8;
+	else if(
+		digit_1 == 1 && digit_2 == 1 ||
+		digit_1 == 1 && digit_2 == 2 ||
+		digit_1 == 1 && digit_2 == 3 ||
+		digit_1 == 1 && digit_2 == 4 ||
+		digit_1 == 1 && digit_2 == 5)
+			return 5;
+	else if (
+		digit_1 == 1 && digit_2 == 6 ||
+		digit_1 == 1 && digit_2 == 7 ||
+		digit_1 == 1 && digit_2 == 8 ||
+		digit_1 == 1 && digit_2 == 9)
+			return 4;
+	else
+		return 0;
+}
+
 int main(){
 	struct tm* local;
 	time_t t = time(NULL);
@@ -88,16 +200,28 @@ int main(){
 		unsigned int y = 0 , x =0;
 		notcurses_stddim_yx(nc, &y, &x);
 		unsigned y_center = y / 2 - 5;
-		unsigned x_center = 0;
+		unsigned x_center = x/3;
 		clear_prev_screen(stdplane);
-		table[first_digit((local->tm_hour))](stdplane, 0 + x_center, y_center);
-		table[last_digit((local->tm_hour))] (stdplane, 5 + x_center, y_center);
-		table[TWO_DOTS](stdplane, 20 + x_center, y_center);
-		table[first_digit((local->tm_min))](stdplane, 30 + x_center, y_center);
-		table[last_digit((local->tm_min))] (stdplane, 40 + x_center, y_center);
-		table[TWO_DOTS](stdplane, 50 + x_center, y_center);
-		table[first_digit((local->tm_sec))](stdplane, 60 + x_center, y_center);
-		table[last_digit((local->tm_sec))](stdplane,  70 + x_center, y_center);
+
+		int x_offset = x_center; /// beggining
+		table[first_digit((local->tm_hour))](stdplane, x_offset , y_center);
+		x_offset = calculate_offset(first_digit(local->tm_hour),last_digit(local->tm_hour)) + x_center;
+		table[last_digit((local->tm_hour))] (stdplane, x_offset, y_center);
+		x_offset = x_offset + 8;
+
+		table[TWO_DOTS](stdplane, x_offset, y_center);
+		x_offset = x_offset + 7;
+
+		table[first_digit((local->tm_min))](stdplane, x_offset , y_center);
+		x_offset = x_offset + calculate_offset(first_digit(local->tm_min),last_digit(local->tm_min));
+		table[last_digit((local->tm_min))] (stdplane, x_offset, y_center);
+
+		x_offset = x_offset + 7;
+		table[TWO_DOTS](stdplane, x_offset, y_center);
+		x_offset = x_offset + 7;
+		table[first_digit((local->tm_sec))](stdplane, x_offset , y_center);
+		x_offset = x_offset + calculate_offset(first_digit(local->tm_sec),last_digit(local->tm_sec));
+		table[last_digit((local->tm_sec))](stdplane,  x_offset , y_center);
 		notcurses_render(nc);
 	}
 
