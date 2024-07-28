@@ -2,6 +2,7 @@
 #include <time.h>
 #include "digits.h"
 
+#define TWO_DOTS 10
 
 
 
@@ -77,23 +78,26 @@ int main(){
 	}
 	struct ncplane* stdplane = notcurses_stdplane(nc);
 
-	ncplane_cursor_move_yx(stdplane, 0, 0);
+	ncplane_cursor_move_yx(stdplane, 50, 0);
 	ncinput ni;
 	uint32_t c;
 	while(1){
 		time_t t = time(NULL);
 		local = localtime(&t);
 		/* sleep(1); */
+		unsigned int y = 0 , x =0;
+		notcurses_stddim_yx(nc, &y, &x);
+		unsigned y_center = y / 2 - 5;
+		unsigned x_center = 0;
 		clear_prev_screen(stdplane);
-		table[first_digit((local->tm_sec))](stdplane,0);
-		table[last_digit((local->tm_sec))](stdplane,10);
-		table[10](stdplane,20);
-		/* two_dot(stdplane,50) */
-		/* table[first_digit((local->tm_sec))](stdplane,30); */
-		/* table[last_digit((local->tm_sec))](stdplane,40); */
-		/* table[last_digit((TWO_DOTS))](stdplane,50); */
-		/* table[first_digit((local->tm_sec))](stdplane,60); */
-		/* table[last_digit((local->tm_sec))](stdplane,70); */
+		table[first_digit((local->tm_hour))](stdplane, 0 + x_center, y_center);
+		table[last_digit((local->tm_hour))] (stdplane, 5 + x_center, y_center);
+		table[TWO_DOTS](stdplane, 20 + x_center, y_center);
+		table[first_digit((local->tm_min))](stdplane, 30 + x_center, y_center);
+		table[last_digit((local->tm_min))] (stdplane, 40 + x_center, y_center);
+		table[TWO_DOTS](stdplane, 50 + x_center, y_center);
+		table[first_digit((local->tm_sec))](stdplane, 60 + x_center, y_center);
+		table[last_digit((local->tm_sec))](stdplane,  70 + x_center, y_center);
 		notcurses_render(nc);
 	}
 
