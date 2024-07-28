@@ -127,7 +127,6 @@ void print_0(struct ncplane* stdplane, int offset, int y_offset){
 	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
     ncplane_putstr(stdplane, zero6);
 	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
 }
 void print_1(struct ncplane* stdplane, int offset, int y_offset){
 	ncplane_cursor_move_yx(stdplane, 0, 0);

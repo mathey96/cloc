@@ -4,21 +4,6 @@
 
 #define TWO_DOTS 10
 
-
-
-
-/* struct tm { */
-/* 	int tm_sec;    /\* Seconds (0-60) *\/ */
-/* 	int tm_min;    /\* Minutes (0-59) *\/ */
-/* 	int tm_hour;   /\* Hours (0-23) *\/ */
-/* 	int tm_mday;   /\* Day of the month (1-31) *\/ */
-/* 	int tm_mon;    /\* Month (0-11) *\/ */
-/* 	int tm_year;   /\* Year - 1900 *\/ */
-/* 	int tm_wday;   /\* Day of the week (0-6, Sunday = 0) *\/ */
-/* 	int tm_yday;   /\* Day in the year (0-365, 1 Jan = 0) *\/ */
-/* 	int tm_isdst;  /\* Daylight saving time *\/ */
-/* }; */
-
 inline int
 first_digit(int num){
 	int digit = num / 10;
@@ -43,7 +28,7 @@ clear_prev_screen(struct ncplane* plane){
 }
 
 int calculate_offset(int digit_1, int digit_2){
-	if(
+	if(  // there are a plenty of impossible cases here (e.g. there isn't 85-th minute in 24 - hour clock system
 		digit_1 == 0 && digit_2 == 0 ||
 		digit_1 == 0 && digit_2 == 1 ||
 		digit_1 == 0 && digit_2 == 2 ||
@@ -137,14 +122,13 @@ int calculate_offset(int digit_1, int digit_2){
 		digit_1 == 4 && digit_2 == 8 ||
 		digit_1 == 4 && digit_2 == 9)
 			return 8;
-	else if(
-		digit_1 == 1 && digit_2 == 1 ||
+	else if (
 		digit_1 == 1 && digit_2 == 2 ||
 		digit_1 == 1 && digit_2 == 3 ||
 		digit_1 == 1 && digit_2 == 4 ||
-		digit_1 == 1 && digit_2 == 5)
-			return 5;
-	else if (
+		digit_1 == 1 && digit_2 == 5 ||
+		digit_1 == 1 && digit_2 == 0 ||
+		digit_1 == 1 && digit_2 == 1 ||
 		digit_1 == 1 && digit_2 == 6 ||
 		digit_1 == 1 && digit_2 == 7 ||
 		digit_1 == 1 && digit_2 == 8 ||
@@ -154,35 +138,55 @@ int calculate_offset(int digit_1, int digit_2){
 		return 0;
 }
 
+int offset_before_twodots(int num){
+	switch(num){
+	case 0:
+		return 7;
+		break;
+	case 1:
+		return 3;
+		break;
+	case 2:
+	case 3:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+		return 7;
+		break;
+	case 4:
+		return 8;
+	default:
+		fprintf(stderr, " wrong digit");
+		return -1;
+	}
+}
+
+int offset_after_twodots(int num_after_dots){
+	switch(num_after_dots){
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 6:
+	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway
+	case 8:
+	case 9:
+		return 5;
+	default:
+		fprintf(stderr, " wrong digit");
+		return -1;
+	}
+}
+
+
 int main(){
 	struct tm* local;
 	time_t t = time(NULL);
 
-	while(0){
-		time_t t = time(NULL);
-		local = localtime(&t);
-		sleep(1);
-		/* printf("sec %d\n", local->tm_sec); */
-		/* printf("sec %d %d \n", first_digit(local->tm_sec),last_digit(local->tm_sec)); */
-		/* printf("hour %d%d\n", first_digit(local->tm_hour),last_digit(local->tm_hour) ); */
-		/* printf("min %d\n", local->tm_min); */
-		/* printf("day in month %d\n", local->tm_mday); */
-		/* printf("mon %d\n", local->tm_mon + 1); */
-		/* printf("%d\n", local->tm_year); */
-	}
-
-
-		/* printf("%s",zero); */
-		/* printf("%s",one); */
-		/* printf("%s",two); */
-		/* printf("%s",three); */
-		/* printf("%s",four); */
-		/* printf("%s",five); */
-		/* printf("%s",six); */
-		/* printf("%s",seven); */
-		/* printf("%s",eight); */
-		/* printf("%s",nine); */
-		/* printf("%s",nine); */
 	struct notcurses_options opts = {0}; // man notcurses_init(3)
 	struct notcurses* nc = notcurses_init(&opts, stdout);
 	if(nc == NULL){
@@ -199,29 +203,34 @@ int main(){
 		/* sleep(1); */
 		unsigned int y = 0 , x =0;
 		notcurses_stddim_yx(nc, &y, &x);
-		unsigned y_center = y / 2 - 5;
-		unsigned x_center = x/3;
+		unsigned y_center = y / 3 + 1;
+		unsigned x_center = x / 3;
+
+
 		clear_prev_screen(stdplane);
 
 		int x_offset = x_center; /// beggining
+
 		table[first_digit((local->tm_hour))](stdplane, x_offset , y_center);
 		x_offset = calculate_offset(first_digit(local->tm_hour),last_digit(local->tm_hour)) + x_center;
 		table[last_digit((local->tm_hour))] (stdplane, x_offset, y_center);
-		x_offset = x_offset + 8;
 
-		table[TWO_DOTS](stdplane, x_offset, y_center);
-		x_offset = x_offset + 7;
+		x_offset = x_offset + offset_before_twodots(last_digit(local->tm_hour));
+		table[TWO_DOTS](stdplane,x_offset, y_center);
+		x_offset = x_offset + offset_after_twodots(first_digit(local->tm_min));
 
 		table[first_digit((local->tm_min))](stdplane, x_offset , y_center);
 		x_offset = x_offset + calculate_offset(first_digit(local->tm_min),last_digit(local->tm_min));
 		table[last_digit((local->tm_min))] (stdplane, x_offset, y_center);
 
-		x_offset = x_offset + 7;
+		x_offset = x_offset + offset_before_twodots(last_digit(last_digit(local->tm_min)));;
 		table[TWO_DOTS](stdplane, x_offset, y_center);
-		x_offset = x_offset + 7;
+		x_offset = x_offset + offset_after_twodots(first_digit(local->tm_sec));;
+
 		table[first_digit((local->tm_sec))](stdplane, x_offset , y_center);
 		x_offset = x_offset + calculate_offset(first_digit(local->tm_sec),last_digit(local->tm_sec));
-		table[last_digit((local->tm_sec))](stdplane,  x_offset , y_center);
+		table[last_digit((local->tm_sec))] (stdplane,  x_offset , y_center);
+
 		notcurses_render(nc);
 	}
 
