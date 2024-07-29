@@ -207,6 +207,13 @@ int main(){
 		unsigned x_center = x / 3;
 
 
+		if ( x <= 70){ // handling windows resizing
+			x_center = 0;
+		}
+		if ( y < 15){
+			y_center = 0;
+		}
+
 		clear_prev_screen(stdplane);
 
 		int x_offset = x_center; /// beggining
