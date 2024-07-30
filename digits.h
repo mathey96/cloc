@@ -303,7 +303,7 @@ void two_dot(struct ncplane* stdplane, int offset, int y_offset){
 }
 
 typedef void (*digit) (struct ncplane* , int, int );
-const digit table[] =
+const digit table[] =  // some dynamic dispatch here, who needs c++ anyway?
 {
 	print_0,
 	print_1,
