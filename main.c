@@ -1,9 +1,8 @@
 #include <time.h>
 #include "digits.h"
-#include "helpers.h"
+#include <pthread.h>
 
 #define TWO_DOTS 10
-
 
 void
 clear_prev_screen(struct ncplane* plane){
@@ -16,6 +15,29 @@ clear_prev_screen(struct ncplane* plane){
 	}
 }
 
+
+void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second,
+/* int (*calc_offset)(int, int), int (*offsetbf_dots) (int),int (*offsetaf_dots) (int), */ font cur_font) {
+		table[first_digit((hour))](stdplane, x_offset , y_center, cur_font);
+		x_offset = cur_font.calculate_offset(first_digit(hour),last_digit(hour)) + x_offset;
+		table[last_digit((hour))] (stdplane, x_offset, y_center, cur_font);
+
+		x_offset = x_offset + cur_font.offset_before_twodots(last_digit(hour));
+		table[TWO_DOTS](stdplane, x_offset, y_center,cur_font );
+		x_offset = x_offset + cur_font.offset_after_twodots(first_digit(minute));
+
+		table[first_digit((minute))](stdplane, x_offset , y_center, cur_font);
+		x_offset = x_offset + cur_font.calculate_offset(first_digit(minute),last_digit(minute));
+		table[last_digit((minute))] (stdplane, x_offset, y_center, cur_font);
+
+		x_offset = x_offset + cur_font.offset_before_twodots(last_digit(last_digit(minute)));;
+		table[TWO_DOTS](stdplane, x_offset, y_center, cur_font);
+		x_offset = x_offset + cur_font.offset_after_twodots(first_digit(second));;
+
+		table[first_digit((second))](stdplane, x_offset , y_center, cur_font);
+		x_offset = x_offset + cur_font.calculate_offset(first_digit(second),last_digit(second));
+		table[last_digit((second))] (stdplane,  x_offset , y_center, cur_font);
+}
 
 
 int main(){
@@ -30,8 +52,6 @@ int main(){
 	struct ncplane* stdplane = notcurses_stdplane(nc);
 
 	ncplane_cursor_move_yx(stdplane, 50, 0);
-	ncinput ni;
-	uint32_t c;
 	while(1){
 		time_t t = time(NULL);
 		local = localtime(&t);
@@ -53,38 +73,11 @@ int main(){
 
 		int x_offset = x_center; /// beggining
 
-		table[first_digit((local->tm_hour))](stdplane, x_offset , y_center);
-		x_offset = calculate_offset(first_digit(local->tm_hour),last_digit(local->tm_hour)) + x_center;
-		table[last_digit((local->tm_hour))] (stdplane, x_offset, y_center);
+		display_cloc(nc, stdplane, x_offset, y_center,
+					local->tm_hour, local->tm_min, local->tm_sec, fonts[1]);
 
-		x_offset = x_offset + offset_before_twodots(last_digit(local->tm_hour));
-		table[TWO_DOTS](stdplane,x_offset, y_center);
-		x_offset = x_offset + offset_after_twodots(first_digit(local->tm_min));
-
-		table[first_digit((local->tm_min))](stdplane, x_offset , y_center);
-		x_offset = x_offset + calculate_offset(first_digit(local->tm_min),last_digit(local->tm_min));
-		table[last_digit((local->tm_min))] (stdplane, x_offset, y_center);
-
-		x_offset = x_offset + offset_before_twodots(last_digit(last_digit(local->tm_min)));;
-		table[TWO_DOTS](stdplane, x_offset, y_center);
-		x_offset = x_offset + offset_after_twodots(first_digit(local->tm_sec));;
-
-		table[first_digit((local->tm_sec))](stdplane, x_offset , y_center);
-		x_offset = x_offset + calculate_offset(first_digit(local->tm_sec),last_digit(local->tm_sec));
-		table[last_digit((local->tm_sec))] (stdplane,  x_offset , y_center);
 
 		notcurses_render(nc);
 	}
 
-	while((c = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){
-		if(ni.evtype == NCTYPE_RELEASE){
-			continue;
-		} else if(c == 'q'){
-			notcurses_stop(nc);
-			break;
-		} else if(c == 'j'){  // this whole block needs to be refactored
-			notcurses_render(nc);
-		}
-				/* nc.render(); */
-	}
 }

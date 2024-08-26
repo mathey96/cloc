@@ -1,7 +1,10 @@
 #include <notcurses/notcurses.h>
 #include <ncpp/NotCurses.hh>
-//  output taken from figlet
+#include "fonts/mono9.h"
+#include "helpers.h"
 
+#define NUM_OF_SYMBOLS 11
+#define VEC_MAXSIZE 7
 
 const char* zero = "";
 const char* zero1 = "  ___\n";
@@ -10,6 +13,8 @@ const char* zero3 = "| | | |\n";
 const char* zero4 = "| |_| |\n";
 const char* zero5 = " \\___/ \n";
 const char* zero6 = "       \n";
+
+
 
 
 const char* one  =  "";
@@ -101,208 +106,122 @@ const char* two_dots6 = "	\n";
 /* const char* two_dots5 = "  _  \n"; */
 /* const char* two_dots6 = " |_| \n"; */
 
-void print_1(struct ncplane* stdplane, int offset, int y_offset);
-void print_2(struct ncplane* stdplane, int offset, int y_offset);
-void print_3(struct ncplane* stdplane, int offset, int y_offset);
-void print_4(struct ncplane* stdplane, int offset, int y_offset);
-void print_5(struct ncplane* stdplane, int offset, int y_offset);
-void print_6(struct ncplane* stdplane, int offset, int y_offset);
-void print_7(struct ncplane* stdplane, int offset, int y_offset);
-void print_8(struct ncplane* stdplane, int offset, int y_offset);
-void print_9(struct ncplane* stdplane, int offset, int y_offset);
-void two_dot(struct ncplane* stdplane, int offset, int y_offset);
+const char* const font_standard[NUM_OF_SYMBOLS][VEC_MAXSIZE] = {
+	{zero, zero1, zero2, zero3, zero4, zero5, zero6},
+	{one, one1, one2, one3, one4, one5, one6},
+	{two, two1, two2, two3, two4, two5, two6},
+	{three, three1, three2, three3, three4, three5, three6},
+	{four, four1, four2, four3, four4, four5, four6},
+	{five, five1, five2, five3, five4, five5, five6},
+	{six, six1, six2, six3, six4, six5, six6},
+	{seven, seven1, seven2, seven3, seven4, seven5, seven6},
+	{eight, eight1, eight2, eight3, eight4, eight5, eight6},
+	{nine, nine1, nine2, nine3, nine4, nine5, nine6},
+	{two_dots, two_dots1, two_dots2, two_dots3, two_dots4, two_dots5, two_dots6}};
 
-void print_0(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, zero);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, zero1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, zero2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, zero3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, zero4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, zero5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, zero6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-}
-void print_1(struct ncplane* stdplane, int offset, int y_offset){
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-    ncplane_putstr(stdplane, one);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset , offset);
-    ncplane_putstr(stdplane, one1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, one2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, one3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, one4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, one5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, one6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
+
+typedef struct font {
+	const char* const (*pfont)[NUM_OF_SYMBOLS][VEC_MAXSIZE];
+	int (*calculate_offset) (int,int);
+	int (*offset_before_twodots) (int);
+	int (*offset_after_twodots) (int);
+	int size;
+} font;
+
+font font_standard_font = {&font_standard, &calculate_offset_standard, &offset_before_twodots_standard, &offset_after_twodots_standard, 7};
+font font_mono9_font = {&font_mono9, &calculate_offset_mono9, &offset_before_twodots_mono9, &offset_after_twodots_mono9, 6};
+
+
+font fonts[3] = {font_standard_font, font_mono9_font};
+
+void print_9(struct ncplane* stdplane, int offset, int y_offset, const char* const array[]);
+void two_dot(struct ncplane* stdplane, int offset, int y_offset, const char* const array[]);
+
+
+void print_0(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[0][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
 }
 
-void print_2(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, two);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, two1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, two2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, two3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, two4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, two5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, two6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-}
-void print_3(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, three);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, three1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, three2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, three3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, three4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, three5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, three6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-}
-void print_4(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, four);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, four1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, four2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, four3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, four4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, four5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, four6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-}
-void print_5(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, five);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, five1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, five2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, five3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, five4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, five5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, five6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-}
-void print_6(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, six);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, six1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, six2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, six3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, six4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, six5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, six6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-}
-void print_7(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, seven);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, seven1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, seven2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, seven3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, seven4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, seven5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, seven6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
-}
-void print_8(struct ncplane* stdplane, int offset, int y_offset){
-    ncplane_putstr(stdplane, eight);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, eight1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, eight2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, eight3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, eight4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, eight5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, eight6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
+void print_1(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[1][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
 }
 
-void print_9(struct ncplane* stdplane, int offset, int y_offset){
-	ncplane_putstr(stdplane, nine);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, nine1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, nine2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, nine3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, nine4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, nine5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, nine6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
+void print_2(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[2][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+void print_3(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[3][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+void print_4(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[4][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+void print_5(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[5][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+void print_6(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[6][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+void print_7(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[7][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
 }
 
-void two_dot(struct ncplane* stdplane, int offset, int y_offset){
-	ncplane_putstr(stdplane, two_dots);
-	ncplane_cursor_move_yx(stdplane, 1 + y_offset, offset);
-    ncplane_putstr(stdplane, two_dots1);
-	ncplane_cursor_move_yx(stdplane, 2 + y_offset, offset);
-    ncplane_putstr(stdplane, two_dots2);
-	ncplane_cursor_move_yx(stdplane, 3 + y_offset, offset);
-    ncplane_putstr(stdplane, two_dots3);
-	ncplane_cursor_move_yx(stdplane, 4 + y_offset, offset);
-    ncplane_putstr(stdplane, two_dots4);
-	ncplane_cursor_move_yx(stdplane, 5 + y_offset, offset);
-    ncplane_putstr(stdplane, two_dots5);
-	ncplane_cursor_move_yx(stdplane, 6 + y_offset, offset);
-    ncplane_putstr(stdplane, two_dots6);
-	ncplane_cursor_move_yx(stdplane, 7 + y_offset, offset);
-	ncplane_cursor_move_yx(stdplane, 0, 0);
+void print_8(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[8][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
 }
 
-typedef void (*digit) (struct ncplane* , int, int );
+void print_9(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[9][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+
+void two_dot(struct ncplane* stdplane, int offset, int y_offset, font current_font){
+	for (int i = 0; i < current_font.size; i++ ){
+    ncplane_putstr(stdplane, (*current_font.pfont)[10][i]);
+	ncplane_cursor_move_yx(stdplane, 1 + i + y_offset, offset);
+	}
+}
+
+typedef void (*digit) (struct ncplane* stdplane, int offset, int y_offset, font current_font);
+
 const digit table[] =  // some dynamic dispatch here, who needs c++ anyway?
 {
 	print_0,
