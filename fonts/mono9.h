@@ -85,11 +85,11 @@ const char* const mono9_nine_5 = " ▀▄▄▄▀ \n";
 
 
 const char* const mono9_twodots_0 = "\n";
-const char* const mono9_twodots_1 = "   █   \n";
-const char* const mono9_twodots_2 = "\n ";
-const char* const mono9_twodots_3 = "   █   \n";
-const char* const mono9_twodots_4 = "       \n ";
-const char* const mono9_twodots_5 = "\n ";
+const char* const mono9_twodots_1 = "\n ";
+const char* const mono9_twodots_2 = "   █   \n";
+const char* const mono9_twodots_3 = "\n ";
+const char* const mono9_twodots_4 = "   █   \n";
+const char* const mono9_twodots_5 = "       \n ";
 
 
 const char* const font_mono9[11][7] =

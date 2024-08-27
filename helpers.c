@@ -1,39 +1,5 @@
 #include "helpers.h"
 
-int calculate_offset2(int digit_1, int digit_2){
-		switch(digit_1){
-			case (0):
-				return 7;
-			case (1):
-				return 4;
-			case (2):
-			switch(digit_2){
-					case(0):  case(2): case(3):  case(5): case(6): case(7): case(8): case(9):
-						return 7;
-					case(4): case(1):
-						return 8;
-				}
-			case (3):
-			switch(digit_2){
-					case(0): case(1): case(2): case(3):  case(5): case(6): case(7): case(8): case(9):
-						return 7;
-					case(4):
-						return 8;
-				}
-			case (4):
-				return 8;
-			case (5):
-			case (6):
-			case (7):
-			case (8):
-			case (9):
-
-
-
-		default:
-			return 0;
-		}
-}
 
 int calculate_offset_mono9(int digit_1, int digit_2){
 		switch(digit_1){
