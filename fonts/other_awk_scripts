@@ -1,0 +1,19 @@
+
+awk '
+BEGIN { count = 0 }
+{
+    if ($0 !~ /^[[:space:]]*$/) {
+        count++
+        lines[count] = $0
+    }
+    else {
+      print ""
+    i++
+    }
+}
+END {
+    for (i = 1; i <= count; i++) {
+        print "hello" i " " lines[i]
+    }
+}
+' awktest
