@@ -128,6 +128,7 @@ handle_input(void* vnc){
 
 void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second,
 /* int (*calc_offset)(int, int), int (*offsetbf_dots) (int),int (*offsetaf_dots) (int), */ font cur_font) {
+		x_offset = x_offset + cur_font.correct_offset;
 		table[first_digit((hour))](stdplane, x_offset , y_center, cur_font);
 		x_offset = cur_font.calculate_offset(first_digit(hour),last_digit(hour)) + x_offset;
 		table[last_digit((hour))] (stdplane, x_offset, y_center, cur_font);
@@ -192,42 +193,8 @@ int main(){
 
 		display_cloc(nc, stdplane, x_offset, y_center,
 					local->tm_hour, local->tm_min, local->tm_sec, fonts[0]);
-		/* OFFSET_DEBUG(5, 2,    4, 3, 4, 4, 4, 4, 4, 4, 4, 4); */
- 	 /*        INDEX(0, 0,    0, 1, 2, 3, 4, 5, 6, 7, 8, 9); */
-		/* table[9](stdplane, 0 + x_center, y_center - 0,fonts[2]); */
-
-		/* table[0](stdplane, 70 + x_center, y_center - 10, fonts[2]); */
-		/* table[1](stdplane, 78 + x_center, y_center - 10, fonts[2]); */
-
-		/* table[0](stdplane, 30 + x_center, y_center - 10, fonts[2]); */
-		/* table[2](stdplane, 38 + x_center, y_center - 10, fonts[2]); */
-
-		/* table[0](stdplane, 50 + x_center, y_center - 10, fonts[2]); */
-		/* table[3] (stdplane, 58 + x_center, y_center - 10, fonts[2]); */
-
-		/* table[0](stdplane, 0 + x_center, y_center - 10, fonts[2]); */
-		/* table[3] (stdplane, 8 + x_center, y_center - 10, fonts[2]); */
-
-		/* table[0](stdplane, 30 + x_center, y_center , fonts[2]); */
-		/* table[4] (stdplane, 38 + x_center, y_center, fonts[2]); */
-
-		/* table[0](stdplane, 50 + x_center, y_center , fonts[2]); */
-		/* table[5] (stdplane, 58 + x_center, y_center , fonts[2]); */
-
-		/* table[0](stdplane, 0 + x_center, y_center, fonts[2]); */
-		/* table[6] (stdplane, 8 + x_center, y_center, fonts[2]); */
-
-		/* table[0](stdplane, 30 + x_center, y_center + 10, fonts[2]); */
-		/* table[7] (stdplane, 38 + x_center, y_center + 10, fonts[2]); */
-
-		/* table[0](stdplane, 50 + x_center, y_center + 10, fonts[2]); */
-		/* table[8] (stdplane, 58 + x_center, y_center + 10, fonts[2]); */
-
-		/* table[0](stdplane, 0 + x_center, y_center + 10, fonts[2]); */
-		/* table[9] (stdplane, 8 + x_center, y_center + 10, fonts[2]); */
-
-//		table[first_digit((local->tm_hour))](stdplane, x_offset , y_center);
-
+       		 /* INDEX(5, 2,    0, 1, 2, 3, 4, 5, 6, 7, 8, 9); */
+		/* OFFSET_DEBUG(10, 2,    3, 3, 4, 3, 3, 2, 2, 3, 2, 3); */
 		notcurses_render(nc);
 	}
 

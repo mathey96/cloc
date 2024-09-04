@@ -167,3 +167,72 @@ int offset_after_twodots_standard(int num_after_dots){
 		return -1;
 	}
 }
+
+
+int calculate_offset_mini(int digit_1, int digit_2){
+	switch(digit_1){
+		case 0:
+		case 1:
+				return 3;
+		case 2:
+			if((digit_2 >= 2 && digit_2 < 10) || digit_2 == 0)
+				return 3;
+	    case 3:
+			 if(digit_2 >= 0  )
+				 return 3;
+	    case 4:
+			return 3;
+	    case 5:
+	    case 6:
+	    case 7:
+	    case 8:
+	    case 9:
+			return 3;
+	}
+		fprintf(stderr,"error, no value is returned\n");
+		return 0;
+}
+
+
+
+int offset_before_twodots_mini(int num){
+	switch(num){
+	case 1:
+		return 3;
+		break;
+	case 0:
+	case 2:
+	case 3:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+		return 4;
+		break;
+	case 4:
+		return 3;
+	default:
+		fprintf(stderr, " wrong digit");
+		return -1;
+	}
+}
+
+int offset_after_twodots_mini(int num_after_dots){
+	switch(num_after_dots){
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 6:
+	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 8:
+	case 9:
+		return 2;
+	default:
+		fprintf(stderr, " wrong digit");
+		return -1;
+	}
+}

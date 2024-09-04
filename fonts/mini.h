@@ -52,10 +52,10 @@ const char* const mini_nine_2 = "(_| \n";
 const char* const mini_nine_3 = "  | \n";
 
 
-const char* const mini_twodots_0 = "\n ";
-const char* const mini_twodots_1 = "\n ";
-const char* const mini_twodots_2 = "o \n";
-const char* const mini_twodots_3 = "o \n";
+const char* const mini_twodots_0  = "\n ";
+const char* const mini_twodots_1  = "\n ";
+const char* const mini_twodots_2  = "o \n";
+const char* const mini_twodots_3  = "o \n";
 
 const char* const font_mini[11][7] =
 {
@@ -71,3 +71,7 @@ const char* const font_mini[11][7] =
   {mini_nine_0,     mini_nine_1,     mini_nine_2,     mini_nine_3},
   {mini_twodots_0,  mini_twodots_1,  mini_twodots_2,  mini_twodots_3}
 };
+
+int calculate_offset_mini(int digit_1, int digit_2);
+int offset_before_twodots_mini(int num);
+int offset_after_twodots_mini(int num);
