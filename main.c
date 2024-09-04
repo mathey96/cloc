@@ -65,66 +65,60 @@ clear_prev_screen(struct ncplane* plane){
 }
 
 
-static int
-pass_along(const ncinput* ni){
-	pthread_mutex_lock(&lock);
-	nciqueue *nq = (nciqueue*) malloc(sizeof(*nq));
-	memcpy(&nq->ni, ni, sizeof(*ni));
-	nq->next = NULL;
-	*enqueue = nq;
-	enqueue = &nq->next;
-	pthread_mutex_unlock(&lock);
-	const uint64_t eventcount = 1;
-	int ret = 0;
-	if(write(input_pipefds[1], &eventcount, sizeof(eventcount)) < 0){
-		ret = -1;
-	}
-	pthread_cond_signal(&cond);
-  return ret;
-}
+/* static int */
+/* pass_along(const ncinput* ni){ */
+/* 	pthread_mutex_lock(&lock); */
+/* 	nciqueue *nq = (nciqueue*) malloc(sizeof(*nq)); */
+/* 	memcpy(&nq->ni, ni, sizeof(*ni)); */
+/* 	nq->next = NULL; */
+/* 	*enqueue = nq; */
+/* 	enqueue = &nq->next; */
+/* 	pthread_mutex_unlock(&lock); */
+/* 	const uint64_t eventcount = 1; */
+/* 	int ret = 0; */
+/* 	if(write(input_pipefds[1], &eventcount, sizeof(eventcount)) < 0){ */
+/* 		ret = -1; */
+/* 	} */
+/* 	pthread_cond_signal(&cond); */
+/*   return ret; */
+/* } */
+
+bool thread_done = false;
+static int font_number = 0;
+#define MAX_FONT_NUM sizeof(fonts) / sizeof(fonts[0])
+
 
 static void *
-handle_input(void* vnc){
-  ncinput ni;
-  struct notcurses* nc = (struct notcurses*) vnc;
-  uint32_t id;
-  while((id = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){
-    if(id == 0){
-      continue;
-    }
-    if(id == NCKEY_EOF){
-      break;
-    }
-    // go ahead and pass keyboard through to demo, even if it was a 'q' (this
-    // might cause the demo to exit immediately, as is desired). we can't just
-    // mess with the menu/HUD in our own context, as the demo thread(s) might
-    // be rendering, or otherwise fucking with things we musn't fuck with
-    // concurrentwise (z-axis manipulations, etc.).
-    pass_along(&ni);
-  }
-  return NULL;
-}
+handle_input(void* arg){
+	ncinput ni;
+    struct notcurses* nc = (struct notcurses*)arg;
+	uint32_t id;
+	struct ncplane* stdplane = notcurses_stdplane(nc);
 
-/* void */
-/* *handle_input(void *arg){ */
-/* 	ncinput ni; */
-/* 	struct notcurses* nc = (struct notcurses*) arg; */
-/* 	uint32_t c; */
-/* 	while((c = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){ */
-/* 		if(ni.evtype == NCTYPE_RELEASE){ */
-/* 			continue; */
-/* 		} else if(c == 'q'){ */
-/* 			notcurses_stop(nc); */
-/* 			pthread_exit(NULL); */
-/* 			break; */
-/* 		} */
-/* 	} */
-/* 		/\* } else if(c == 'j'){  // this whole block needs to be refactored *\/ */
-/* 		/\* 	notcurses_render(nc); *\/ */
-/* 		/\* } *\/ */
-/* 		/\* nc.render(); *\/ */
-/*     return NULL; // what dis do */
-/* } */
+	while((id = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){
+		if(id == 0){
+			continue;
+		}
+		if(id == 'q'){
+			thread_done = true;
+			pthread_exit(NULL);
+			break;
+		}
+		if(id == 'n'){
+			if(font_number < MAX_FONT_NUM - 1)
+				font_number++;
+			else
+				font_number = 0;
+		}
+		if(id == 'p'){
+			if(font_number > 0)
+				font_number--;
+			else
+				font_number = MAX_FONT_NUM - 1;
+		}
+	}
+	return NULL;
+}
 
 void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second,
 /* int (*calc_offset)(int, int), int (*offsetbf_dots) (int),int (*offsetaf_dots) (int), */ font cur_font) {
@@ -165,12 +159,9 @@ int main(){
     pthread_t thread_id;
 	ncplane_cursor_move_yx(stdplane, 50, 0);
     if(pthread_create(&thread_id, NULL, &handle_input, nc)){
-		close(input_pipefds[0]);
-		close(input_pipefds[1]);
-		input_pipefds[0] = input_pipefds[1] = -1;
 		return -1;
 	}
-	while(1){
+	while(thread_done != true){
 		time_t t = time(NULL);
 		local = localtime(&t);
 		/* sleep(1); */
@@ -192,10 +183,13 @@ int main(){
 		int x_offset = x_center; /// beggining
 
 		display_cloc(nc, stdplane, x_offset, y_center,
-					local->tm_hour, local->tm_min, local->tm_sec, fonts[0]);
+					local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
        		 /* INDEX(5, 2,    0, 1, 2, 3, 4, 5, 6, 7, 8, 9); */
 		/* OFFSET_DEBUG(10, 2,    3, 3, 4, 3, 3, 2, 2, 3, 2, 3); */
 		notcurses_render(nc);
 	}
-
+		if(pthread_join(thread_id, NULL) == 0){
+			notcurses_stop(nc);
+			return 1;
+		}
 }
