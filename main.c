@@ -1,9 +1,15 @@
 #include <time.h>
 #include "digits.h"
 #include <pthread.h>
+#include "stopwatch.h"
+
+static pthread_cond_t cond_bool = PTHREAD_COND_INITIALIZER;
+
+static pthread_mutex_t mutex_main = PTHREAD_MUTEX_INITIALIZER;
 
 #define TWO_DOTS 10
 
+#define MAX_FONT_NUM sizeof(fonts) / sizeof(fonts[0]) - 1
 #define OFFSET_DEBUG(NUM, FONTNUM, OFFSET0, OFFSET1, OFFSET2, OFFSET3, OFFSET4, OFFSET5, OFFSET6, OFFSET7, OFFSET8, OFFSET9) do{ \
 		table[(NUM)](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]);	\
 		table[0](stdplane, 0 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]);\
@@ -71,9 +77,16 @@
 \
 }while(0) \
 
+
+
+enum MODE {
+	CLOCK_MODE = 0,
+	STOPWATCH_MODE
+};
+
+int CUR_MODE = CLOCK_MODE;
 bool thread_done = false;
 static int font_number = 0;
-#define MAX_FONT_NUM sizeof(fonts) / sizeof(fonts[0]) - 1
 
 
 static void *
@@ -104,12 +117,24 @@ handle_input(void* arg){
 			else
 				font_number = MAX_FONT_NUM;
 		}
+		if(id == 's'){
+			if(CUR_MODE != STOPWATCH_MODE){
+				pthread_mutex_lock(&mutex_bool);
+				CUR_MODE = STOPWATCH_MODE;
+				tick_thread_on = true;
+				pthread_mutex_unlock(&mutex_bool);
+			}
+			else
+				pthread_mutex_lock(&mutex_bool);
+				CUR_MODE = CLOCK_MODE;
+				tick_thread_on = false;
+				pthread_mutex_unlock(&mutex_bool);
+			}
 	}
 	return NULL;
 }
 
-void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second,
-/* int (*calc_offset)(int, int), int (*offsetbf_dots) (int),int (*offsetaf_dots) (int), */ font cur_font) {
+void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 		x_offset = x_offset + cur_font.correct_offset;
 		table[first_digit((hour))](stdplane, x_offset , y_center, cur_font);
 		x_offset = cur_font.calculate_offset(first_digit(hour),last_digit(hour)) + x_offset;
@@ -132,10 +157,9 @@ void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, i
 		table[last_digit((second))] (stdplane,  x_offset , y_center, cur_font);
 }
 
-
 int main(){
 	struct tm* local;
-	time_t t = time(NULL);
+	/* time_t t = time(NULL); */
 
 	struct notcurses_options opts = {0}; // man notcurses_init(3)
 	struct notcurses* nc = notcurses_init(&opts, stdout);
@@ -145,6 +169,7 @@ int main(){
 	struct ncplane* stdplane = notcurses_stdplane(nc);
 
     pthread_t thread_id;
+    pthread_t thread_id2;
 	ncplane_cursor_move_yx(stdplane, 50, 0);
     if(pthread_create(&thread_id, NULL, &handle_input, nc)){
 		return -1;
@@ -154,6 +179,28 @@ int main(){
 		local = localtime(&t);
 		/* sleep(1); */
 		unsigned int y = 0 , x =0;
+		if(CUR_MODE == STOPWATCH_MODE){
+			if(pthread_create(&thread_id2, NULL, &current_tick, NULL)){
+				return -1;
+			}
+			pthread_cond_wait(&cond_ms, &mutex_ms);  // Wait until the condition variable is signaled
+			if(current_ms == 999){
+				pthread_mutex_lock(&mutex_ms);
+				current_ms = 0;
+				current_sec++;
+				pthread_mutex_unlock(&mutex_ms);
+				fprintf(stderr,"sekund: %d",current_min);
+			}
+			if( current_sec == 60){
+				pthread_mutex_lock(&mutex_ms);
+				current_sec = 0;
+				current_min++;
+				pthread_mutex_unlock(&mutex_ms);
+				fprintf(stderr,"minut: %d",current_min);
+				}
+		}
+		if(tick_thread_on == true)
+			pthread_join(thread_id2, NULL);
 
 		// take dimensions of the screen, and third of the screen, to be used to center the output
 		notcurses_stddim_yx(nc, &y, &x);
@@ -172,15 +219,17 @@ int main(){
 
 		display_cloc(nc, stdplane, x_offset, y_center,
 					local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
+
+		// uncomment these macros and comment out display_cloc call if you want to debug and display
+		// offset (spacing) before two dots, offset between numbers and offset after two dots by passing TWO_DOTS
+		// to first argument of  OFFSET_DEBUG
+
 	   /* 	OFFSET_BEFORE_TWODOTS(8, */
        /* 7,  6, 7, 7, 7, 7, 7, 6, 7, 7); */
-	/* 0,  1, 2, 3, 4, 5, 6, 7, 8, 9); */
 
 		/* OFFSET_DEBUG(9, */
 		/* 			 8, */
         /* 6,  6,  6,  6,  6,  6,  6,   6,   6,  6); */
- 	 /* 0,  1,  2,  3,  4,  5,  6,   7,   8,  9); */
-     /* 0,   1,   2,   3,   4,   5,   6,   7,    8,  9); */
 
 		notcurses_render(nc);
 	}

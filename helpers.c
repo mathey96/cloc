@@ -4,7 +4,6 @@
 #define DIG2EQ(DIG) digit_2 == (DIG)
 
 // check if digit num is equal to any of the given variadic args
-
 int is_in_set(int num, int count, ...) {
     va_list args;
     va_start(args, count);
@@ -176,7 +175,7 @@ int offset_after_twodots_standard(int num_after_dots){
 	case 4:
 	case 5:
 	case 6:
-	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 7:
 	case 8:
 	case 9:
 		return 5;
@@ -243,7 +242,7 @@ int offset_after_twodots_mini(int num_after_dots){
 	case 4:
 	case 5:
 	case 6:
-	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 7:
 	case 8:
 	case 9:
 		return 2;
@@ -457,7 +456,7 @@ int offset_after_twodots_smmono12(int num_after_dots){
 	case 4:
 	case 5:
 	case 6:
-	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 7:
 	case 8:
 	case 9:
 		return 7;
@@ -522,7 +521,7 @@ int offset_after_twodots_smscript(int num_after_dots){
 	case 4:
 	case 5:
 	case 6:
-	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 7:
 	case 8:
 	case 9:
 		return 4;
@@ -587,7 +586,7 @@ int offset_after_twodots_smshadow(int num_after_dots){
 	case 4:
 	case 5:
 	case 6:
-	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 7:
 	case 8:
 	case 9:
 		return 4;
@@ -659,7 +658,7 @@ int offset_after_twodots_smslant(int num_after_dots){
 	case 4:
 	case 5:
 	case 6:
-	case 7: // some cases here are not possible at all ( no 80-th minute or second), but are covered anyway for future possibilities
+	case 7:
 	case 8:
 	case 9:
 		return 6;
