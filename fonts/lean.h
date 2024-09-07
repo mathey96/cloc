@@ -1,4 +1,4 @@
-
+#include "../macros.h"
 
 
 const char* const lean_zero_0 = "\n";
@@ -100,7 +100,7 @@ const char* const lean_twodots_4 = "_/      \n";
 const char* const lean_twodots_5 = "\n ";
 
 
-const char* const font_lean[11][7] =
+const char* const font_lean[11][VEC_MAXSIZE] =
 {
 	{lean_zero_0,    lean_zero_1,    lean_zero_2,    lean_zero_3,    lean_zero_4,    lean_zero_5},
 	{lean_one_0,     lean_one_1,     lean_one_2,     lean_one_3,     lean_one_4,     lean_one_5},

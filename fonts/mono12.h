@@ -1,4 +1,4 @@
-
+#include "../macros.h"
 
 
 const char* const mono12_zero_0 = "\n";
@@ -123,7 +123,7 @@ const char* const mono12_twodots_6 = "\n ";
 const char* const mono12_twodots_7 = "\n ";
 
 
-const char* const font_mono12[11][8] =
+const char* const font_mono12[11][VEC_MAXSIZE] =
 {
 	{mono12_zero_0,   mono12_zero_1,   mono12_zero_2,   mono12_zero_3,   mono12_zero_4,   mono12_zero_5, mono12_zero_6, mono12_zero_7},
 	{mono12_one_0,    mono12_one_1,    mono12_one_2,    mono12_one_3,    mono12_one_4,    mono12_one_5, mono12_one_6, mono12_one_7},
@@ -135,7 +135,7 @@ const char* const font_mono12[11][8] =
 	{mono12_seven_0,  mono12_seven_1,  mono12_seven_2,  mono12_seven_3,  mono12_seven_4,  mono12_seven_5, mono12_seven_6, mono12_seven_7},
 	{mono12_eight_0,  mono12_eight_1,  mono12_eight_2,  mono12_eight_3,  mono12_eight_4,  mono12_eight_5, mono12_eight_6, mono12_eight_7},
 	{mono12_nine_0,   mono12_nine_1,   mono12_nine_2,   mono12_nine_3,   mono12_nine_4,   mono12_nine_5, mono12_nine_6, mono12_nine_7},
-	{mono12_twodots_0,mono12_twodots_1,mono12_twodots_2,mono12_twodots_3, mono12_twodots_4, mono12_twodots_5, mono12_twodots6, mono12_twodots7}
+	{mono12_twodots_0,mono12_twodots_1,mono12_twodots_2,mono12_twodots_3, mono12_twodots_4, mono12_twodots_5, mono12_twodots_6, mono12_twodots_7}
 };
 
 int calculate_offset_mono12(int digit_1, int digit_2);

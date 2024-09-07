@@ -4,6 +4,11 @@
 #include "fonts/mini.h"
 #include "fonts/standard.h"
 #include "fonts/lean.h"
+#include "fonts/mono12.h"
+#include "fonts/smmono12.h"
+#include "fonts/smscript.h"
+#include "fonts/smshadow.h"
+#include "fonts/smslant.h"
 
 #include "helpers.h"
 
@@ -21,14 +26,15 @@ typedef struct font {
 font font_standard_font = {&font_standard, &calculate_offset_standard, &offset_before_twodots_standard, &offset_after_twodots_standard, 7, NO_OFFSET};
 font font_mono9_font	= {&font_mono9, &calculate_offset_mono9, &offset_before_twodots_mono9, &offset_after_twodots_mono9, 6, NO_OFFSET};
 font font_mini_font		= {&font_mini, &calculate_offset_mini, &offset_before_twodots_mini, &offset_after_twodots_mini, 4, 15};
-font font_lean_font  =    {&font_lean, &calculate_offset_lean, &offset_before_twodots_lean, &offset_after_twodots_lean, 6, 25};
-/*[X] font font_mono12_font = */
-/*[X] font font_smmono12_font = */
-/*[X] font font_smscript_font = */
-/*[X] font font_smshadow_font = */
-/*[X] font font_smslant_font = */
+font font_lean_font  =    {&font_lean, &calculate_offset_lean, &offset_before_twodots_lean, &offset_after_twodots_lean, 6, -5};
+font font_mono12_font =   {&font_mono12, &calculate_offset_mono12, &offset_before_twodots_mono12, &offset_after_twodots_mono12, 7, -10};
+font font_smmono12_font = {&font_smmono12, &calculate_offset_smmono12, &offset_before_twodots_smmono12, &offset_after_twodots_smmono12, 7, 0};
+font font_smscript_font = {&font_smscript, &calculate_offset_smscript, &offset_before_twodots_smscript, &offset_after_twodots_smscript, 5, 5};
+font font_smshadow_font = {&font_smshadow, &calculate_offset_smshadow, &offset_before_twodots_smshadow, &offset_after_twodots_smshadow, 4, 5};
+font font_smslant_font =  {&font_smslant, &calculate_offset_smslant, &offset_before_twodots_smslant, &offset_after_twodots_smslant, 5, 5};
 
-font fonts[4] = {font_standard_font, font_mono9_font, font_mini_font, font_lean_font};
+font fonts[9] =
+{font_standard_font,  font_mono9_font,  font_mono12_font, font_smmono12_font, font_lean_font, font_mini_font, font_smscript_font, font_smshadow_font, font_smslant_font};
 
 void print_0(struct ncplane* stdplane, int offset, int y_offset, font current_font){
 

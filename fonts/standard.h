@@ -1,5 +1,5 @@
 #define NUM_OF_SYMBOLS 11
-#define VEC_MAXSIZE 7
+#define VEC_MAXSIZE 8
 
 const char* zero = "";
 const char* zero1 = "  ___\n";

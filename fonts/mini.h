@@ -1,3 +1,5 @@
+#include "../macros.h"
+
 const char* const mini_zero_0 = "\n";
 const char* const mini_zero_1 = " _  \n";
 const char* const mini_zero_2 = "/ \\ \n";
@@ -57,7 +59,7 @@ const char* const mini_twodots_1  = "\n ";
 const char* const mini_twodots_2  = "o \n";
 const char* const mini_twodots_3  = "o \n";
 
-const char* const font_mini[11][7] =
+const char* const font_mini[11][VEC_MAXSIZE] =
 {
   {mini_zero_0,     mini_zero_1,     mini_zero_2,     mini_zero_3},
   {mini_one_0,      mini_one_1,      mini_one_2,      mini_one_3},

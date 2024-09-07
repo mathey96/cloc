@@ -5,87 +5,75 @@
 #define TWO_DOTS 10
 
 #define OFFSET_DEBUG(NUM, FONTNUM, OFFSET0, OFFSET1, OFFSET2, OFFSET3, OFFSET4, OFFSET5, OFFSET6, OFFSET7, OFFSET8, OFFSET9) do{ \
-		table[(NUM)](stdplane, 60 + x_center, y_center - 10, fonts[(FONTNUM)]);	\
-		table[0](stdplane, 60 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]);\
-\
-		table[(NUM)](stdplane, 70 + x_center, y_center - 10, fonts[(FONTNUM)]);\
-		table[1](stdplane, 70 + (OFFSET1) + x_center, y_center - 10, fonts[(FONTNUM)]);\
+		table[(NUM)](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]);	\
+		table[0](stdplane, 0 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]);\
 \
 		table[(NUM)](stdplane, 30 + x_center, y_center - 10, fonts[(FONTNUM)]);\
-		table[2](stdplane, 30 + (OFFSET2) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[1](stdplane, 30 + (OFFSET1) + x_center, y_center - 10, fonts[(FONTNUM)]);\
 \
 		table[(NUM)](stdplane, 50 + x_center, y_center - 10, fonts[(FONTNUM)]);\
-		table[3] (stdplane, 50 + (OFFSET3) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[2](stdplane, 50 + (OFFSET2) + x_center, y_center - 10, fonts[(FONTNUM)]); \
 \
-		table[(NUM)](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]);\
-		table[3] (stdplane, 0 + (OFFSET3) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[(NUM)](stdplane, 70 + x_center, y_center - 10, fonts[(FONTNUM)]);\
+		table[3] (stdplane, 70 + (OFFSET3) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+\
+		table[(NUM)](stdplane, 0 + x_center, y_center , fonts[(FONTNUM)]);\
+		table[4] (stdplane, 0 + (OFFSET4) + x_center, y_center, fonts[(FONTNUM)]);	\
 \
 		table[(NUM)](stdplane, 30 + x_center, y_center , fonts[(FONTNUM)]);\
-		table[4] (stdplane, 30 + (OFFSET4) + x_center, y_center, fonts[(FONTNUM)]);	\
+		table[5] (stdplane, 30 + (OFFSET5) + x_center, y_center , fonts[(FONTNUM)]); \
 \
-		table[(NUM)](stdplane, 50 + x_center, y_center , fonts[(FONTNUM)]);\
-		table[5] (stdplane, 50 + (OFFSET5) + x_center, y_center , fonts[(FONTNUM)]); \
-\
-		table[(NUM)](stdplane, 0 + x_center, y_center, fonts[(FONTNUM)]);\
-		table[6] (stdplane, 0 + (OFFSET6) + x_center, y_center, fonts[(FONTNUM)]); \
-\
-		table[(NUM)](stdplane, 30 + x_center, y_center + 10, fonts[(FONTNUM)]);\
-		table[7] (stdplane, 30 + (OFFSET7) + x_center, y_center + 10, fonts[(FONTNUM)]); \
-\
-		table[(NUM)](stdplane, 50 + x_center, y_center + 10, fonts[(FONTNUM)]);\
-		table[8] (stdplane, 50 + (OFFSET8) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+		table[(NUM)](stdplane, 50 + x_center, y_center, fonts[(FONTNUM)]);\
+		table[6] (stdplane, 50 + (OFFSET6) + x_center, y_center, fonts[(FONTNUM)]); \
 \
 		table[(NUM)](stdplane, 0 + x_center, y_center + 10, fonts[(FONTNUM)]);\
-		table[9] (stdplane, 0 + (OFFSET9) + x_center, y_center + 10, fonts[(FONTNUM)]);	\
-		}while(0) \
+		table[7] (stdplane, 0 + (OFFSET7) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+		table[(NUM)](stdplane, 30 + x_center, y_center + 10, fonts[(FONTNUM)]);\
+		table[8] (stdplane, 30 + (OFFSET8) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+		table[(NUM)](stdplane, 50 + x_center, y_center + 10, fonts[(FONTNUM)]);\
+		table[9] (stdplane, 50 + (OFFSET9) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+}while(0) \
 
 
-typedef struct nciqueue {
-	ncinput ni;
-	struct nciqueue *next;
-} nciqueue;
-
-static int input_pipefds[2] = {-1, -1};
-static pthread_cond_t cond; // use pthread_condmonotonic_init()
-
-static pthread_t tid;
-static nciqueue* queue;
-static nciqueue** enqueue = &queue;
-static pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
-
-void
-clear_prev_screen(struct ncplane* plane){
-	unsigned int x,y;
-	// find the dimension of x, and clear the first row with spaces?
-	ncplane_dim_yx(plane, &y, &x);
-	std::string clear_string(x,' ');
-	for(int i=0; i<y; i++){ // fill whole screen with spaces
-		ncplane_putstr_yx(plane, i , 0, clear_string.c_str());
-	}
-}
-
-
-/* static int */
-/* pass_along(const ncinput* ni){ */
-/* 	pthread_mutex_lock(&lock); */
-/* 	nciqueue *nq = (nciqueue*) malloc(sizeof(*nq)); */
-/* 	memcpy(&nq->ni, ni, sizeof(*ni)); */
-/* 	nq->next = NULL; */
-/* 	*enqueue = nq; */
-/* 	enqueue = &nq->next; */
-/* 	pthread_mutex_unlock(&lock); */
-/* 	const uint64_t eventcount = 1; */
-/* 	int ret = 0; */
-/* 	if(write(input_pipefds[1], &eventcount, sizeof(eventcount)) < 0){ */
-/* 		ret = -1; */
-/* 	} */
-/* 	pthread_cond_signal(&cond); */
-/*   return ret; */
-/* } */
+#define OFFSET_BEFORE_TWODOTS(FONTNUM, OFFSET0, OFFSET1, OFFSET2, OFFSET3, OFFSET4, OFFSET5, OFFSET6, OFFSET7, OFFSET8, OFFSET9) do{ \
+		table[(0)](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]);	\
+		table[TWO_DOTS](stdplane, 0 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]);\
+\
+		table[(1)](stdplane, 30 + x_center, y_center - 10, fonts[(FONTNUM)]);\
+		table[TWO_DOTS](stdplane, 30 + (OFFSET1) + x_center, y_center - 10, fonts[(FONTNUM)]);\
+\
+		table[(2)](stdplane, 50 + x_center, y_center - 10, fonts[(FONTNUM)]);\
+		table[TWO_DOTS](stdplane, 50 + (OFFSET2) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+\
+		table[(3)](stdplane, 70 + x_center, y_center - 10, fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 70 + (OFFSET3) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+\
+		table[(4)](stdplane, 0 + x_center, y_center , fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 0 + (OFFSET4) + x_center, y_center, fonts[(FONTNUM)]);	\
+\
+		table[(5)](stdplane, 30 + x_center, y_center , fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 30 + (OFFSET5) + x_center, y_center , fonts[(FONTNUM)]); \
+\
+		table[(6)](stdplane, 50 + x_center, y_center, fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 50 + (OFFSET6) + x_center, y_center, fonts[(FONTNUM)]); \
+\
+		table[(7)](stdplane, + x_center, y_center + 10, fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 0 + (OFFSET7) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+		table[(8)](stdplane, 30 + x_center, y_center + 10, fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 30 + (OFFSET8) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+		table[(9)](stdplane, 50 + x_center, y_center + 10, fonts[(FONTNUM)]);\
+		table[TWO_DOTS] (stdplane, 50 + (OFFSET9) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+}while(0) \
 
 bool thread_done = false;
 static int font_number = 0;
-#define MAX_FONT_NUM sizeof(fonts) / sizeof(fonts[0])
+#define MAX_FONT_NUM sizeof(fonts) / sizeof(fonts[0]) - 1
 
 
 static void *
@@ -105,7 +93,7 @@ handle_input(void* arg){
 			break;
 		}
 		if(id == 'n'){
-			if(font_number < MAX_FONT_NUM - 1)
+			if(font_number < MAX_FONT_NUM )
 				font_number++;
 			else
 				font_number = 0;
@@ -114,7 +102,7 @@ handle_input(void* arg){
 			if(font_number > 0)
 				font_number--;
 			else
-				font_number = MAX_FONT_NUM - 1;
+				font_number = MAX_FONT_NUM;
 		}
 	}
 	return NULL;
@@ -178,14 +166,22 @@ int main(){
 		else if ( y < 25)
 			y_center = 0;
 
-		clear_prev_screen(stdplane);
+		ncplane_erase(stdplane);
 
 		int x_offset = x_center; /// beggining
 
 		display_cloc(nc, stdplane, x_offset, y_center,
 					local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
-       		 /* INDEX(5, 2,    0, 1, 2, 3, 4, 5, 6, 7, 8, 9); */
-		/* OFFSET_DEBUG(10, 2,    3, 3, 4, 3, 3, 2, 2, 3, 2, 3); */
+	   /* 	OFFSET_BEFORE_TWODOTS(8, */
+       /* 7,  6, 7, 7, 7, 7, 7, 6, 7, 7); */
+	/* 0,  1, 2, 3, 4, 5, 6, 7, 8, 9); */
+
+		/* OFFSET_DEBUG(9, */
+		/* 			 8, */
+        /* 6,  6,  6,  6,  6,  6,  6,   6,   6,  6); */
+ 	 /* 0,  1,  2,  3,  4,  5,  6,   7,   8,  9); */
+     /* 0,   1,   2,   3,   4,   5,   6,   7,    8,  9); */
+
 		notcurses_render(nc);
 	}
 		if(pthread_join(thread_id, NULL) == 0){

@@ -1,4 +1,4 @@
-
+#include "../macros.h"
 
 
 const char* const smmono12_zero_0 = "\n";
@@ -114,16 +114,16 @@ const char* const smmono12_nine_7 = " ▝▀▘ \n";
 
 
 const char* const smmono12_twodots_0 = "\n";
-const char* const smmono12_twodots_1 = "  ▄  \n";
-const char* const smmono12_twodots_2 = "  █  \n";
-const char* const smmono12_twodots_3 = "\n ";
-const char* const smmono12_twodots_4 = "  █  \n";
-const char* const smmono12_twodots_5 = "  ▀  \n";
-const char* const smmono12_twodots_6 = "\n ";
+const char* const smmono12_twodots_1 = "\n ";
+const char* const smmono12_twodots_2 = "  ▄  \n";
+const char* const smmono12_twodots_3 = "  █  \n";
+const char* const smmono12_twodots_4 = "\n ";
+const char* const smmono12_twodots_5 = "  █  \n";
+const char* const smmono12_twodots_6 = "  ▀  \n";
 const char* const smmono12_twodots_7 = "\n ";
 
 
-const char* const font_smmono12[11][8] =
+const char* const font_smmono12[11][VEC_MAXSIZE] =
 {
 	{smmono12_zero_0,    smmono12_zero_1,    smmono12_zero_2,    smmono12_zero_3,    smmono12_zero_4,    smmono12_zero_5,    smmono12_zero_6,    smmono12_zero_7},
 	{smmono12_one_0,     smmono12_one_1,     smmono12_one_2,     smmono12_one_3,     smmono12_one_4,     smmono12_one_5,     smmono12_one_6,     smmono12_one_7},

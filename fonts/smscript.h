@@ -1,10 +1,10 @@
-
+#include "../macros.h"
 
 const char* const smscript_zero_0 = "\n";
 const char* const smscript_zero_1 = "  _  \n";
-const char* const smscript_zero_2 = " / \ \n";
+const char* const smscript_zero_2 = " / \\\n";
 const char* const smscript_zero_3 = "|   |\n";
-const char* const smscript_zero_4 = " \_/ \n";
+const char* const smscript_zero_4 = " \\_/ \n";
 
 const char* const smscript_one_0 = "\n";
 const char* const smscript_one_1 = " ,\n";
@@ -21,27 +21,27 @@ const char* const smscript_two_4 = "/__\n";
 const char* const smscript_three_0 = "\n";
 const char* const smscript_three_1 = "____\n";
 const char* const smscript_three_2 = " __/\n";
-const char* const smscript_three_3 = "   \\n";
-const char* const smscript_three_4 = "\__/\n";
+const char* const smscript_three_3 = "   \\\n";
+const char* const smscript_three_4 = "\\__/\n";
 
 
 const char* const smscript_four_0 = "\n";
-const char* const smscript_four_1 = "|  | \n";
-const char* const smscript_four_2 = "|__|_\n";
-const char* const smscript_four_3 = "   | \n";
-const char* const smscript_four_4 = "\n";
+const char* const smscript_four_1 = "\n";
+const char* const smscript_four_2 = "|  | \n";
+const char* const smscript_four_3 = "|__|_\n";
+const char* const smscript_four_4 = "   | \n";
 
 const char* const smscript_five_0 = "\n";
 const char* const smscript_five_1 = " ___\n";
 const char* const smscript_five_2 = "|__ \n";
-const char* const smscript_five_3 = "   \\n";
-const char* const smscript_five_4 = "\__/\n";
+const char* const smscript_five_3 = "   \\\n";
+const char* const smscript_five_4 = "\\__/\n";
 
 const char* const smscript_six_0 = "\n";
 const char* const smscript_six_1 = "  _ \n";
 const char* const smscript_six_2 = " /_ \n";
-const char* const smscript_six_3 = "|/ \\n";
-const char* const smscript_six_4 = " \_/\n";
+const char* const smscript_six_3 = "|/ \\\n";
+const char* const smscript_six_4 = " \\_/\n";
 
 const char* const smscript_seven_0 = "\n";
 const char* const smscript_seven_1 = "____\n";
@@ -52,24 +52,24 @@ const char* const smscript_seven_4 = " /  \n";
 const char* const smscript_eight_0 = "\n";
 const char* const smscript_eight_1 = " __ \n";
 const char* const smscript_eight_2 = "(__)\n";
-const char* const smscript_eight_3 = "/  \\n";
-const char* const smscript_eight_4 = "\__/\n";
+const char* const smscript_eight_3 = "/  \\\n";
+const char* const smscript_eight_4 = "\\__/\n";
 
 const char* const smscript_nine_0 = "\n";
 const char* const smscript_nine_1 = " __ \n";
 const char* const smscript_nine_2 = "/  |\n";
-const char* const smscript_nine_3 = "\_/|\n";
+const char* const smscript_nine_3 = "\\_/|\n";
 const char* const smscript_nine_4 = "   |\n";
 
 
 const char* const smscript_twodots_0 = "\n";
-const char* const smscript_twodots_1 = "o\n";
-const char* const smscript_twodots_2 = "\n ";
-const char* const smscript_twodots_3 = "o\n";
-const char* const smscript_twodots_4 = "\n ";
+const char* const smscript_twodots_1 = "\n ";
+const char* const smscript_twodots_2 = "o\n";
+const char* const smscript_twodots_3 = "\n ";
+const char* const smscript_twodots_4 = "o\n";
 
 
-const char* const font_smscript[11][7] =
+const char* const font_smscript[11][VEC_MAXSIZE] =
 {
 	{smscript_zero_0,    smscript_zero_1,    smscript_zero_2,    smscript_zero_3,    smscript_zero_4},
 	{smscript_one_0,     smscript_one_1,     smscript_one_2,     smscript_one_3,     smscript_one_4},

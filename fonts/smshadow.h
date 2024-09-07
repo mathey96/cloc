@@ -1,9 +1,9 @@
-
+#include "../macros.h"
 
 const char* const smshadow_zero_0 = "\n";
-const char* const smshadow_zero_1 = "   \  \n";
+const char* const smshadow_zero_1 = "   \\  \n";
 const char* const smshadow_zero_2 = " (  | \n";
-const char* const smshadow_zero_3 = "\__/  \n";
+const char* const smshadow_zero_3 = "\\__/  \n";
 
 const char* const smshadow_one_0 = "\n";
 const char* const smshadow_one_1 = "_ | \n";
@@ -17,7 +17,7 @@ const char* const smshadow_two_3 = "___| \n";
 
 const char* const smshadow_three_0 = "\n";
 const char* const smshadow_three_1 = "__ / \n";
-const char* const smshadow_three_2 = " _ \ \n";
+const char* const smshadow_three_2 = " _ \\ \n";
 const char* const smshadow_three_3 = "___/ \n";
 
 const char* const smshadow_four_0 = "\n";
@@ -27,13 +27,13 @@ const char* const smshadow_four_3 = "  _|  \n";
 
 const char* const smshadow_five_0 = "\n";
 const char* const smshadow_five_1 = " __| \n";
-const char* const smshadow_five_2 = "__ \ \n";
+const char* const smshadow_five_2 = "__ \\ \n";
 const char* const smshadow_five_3 = "___/ \n";
 
 const char* const smshadow_six_0 = "\n";
 const char* const smshadow_six_1 = "  /   \n";
-const char* const smshadow_six_2 = "  _ \ \n";
-const char* const smshadow_six_3 = "\___/ \n";
+const char* const smshadow_six_2 = "  _ \\ \n";
+const char* const smshadow_six_3 = "\\___/ \n";
 
 const char* const smshadow_seven_0 = "\n";
 const char* const smshadow_seven_1 = "__  / \n";
@@ -42,12 +42,12 @@ const char* const smshadow_seven_3 = " _/   \n";
 
 const char* const smshadow_eight_0 = "\n";
 const char* const smshadow_eight_1 = "  _ ) \n";
-const char* const smshadow_eight_2 = "  _ \ \n";
-const char* const smshadow_eight_3 = "\___/ \n";
+const char* const smshadow_eight_2 = "  _ \\ \n";
+const char* const smshadow_eight_3 = "\\___/ \n";
 
 const char* const smshadow_nine_0 = "\n";
-const char* const smshadow_nine_1 = "  _ \ \n";
-const char* const smshadow_nine_2 = "\_  / \n";
+const char* const smshadow_nine_1 = "  _ \\ \n";
+const char* const smshadow_nine_2 = "\\_  / \n";
 const char* const smshadow_nine_3 = "  _/  \n";
 
 const char* const smshadow_twodots_0 = "\n";
@@ -56,7 +56,7 @@ const char* const smshadow_twodots_2 = "\n ";
 const char* const smshadow_twodots_3 = "_) \n";
 
 
-const char* const font_smshadow[11][7] =
+const char* const font_smshadow[11][VEC_MAXSIZE] =
 {
 	{smshadow_zero_0,    smshadow_zero_1,    smshadow_zero_2,    smshadow_zero_3},
 	{smshadow_one_0,     smshadow_one_1,     smshadow_one_2,     smshadow_one_3},
