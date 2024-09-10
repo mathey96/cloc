@@ -1,3 +1,3 @@
 #!/bin/bash
 
-g++ main.c helpers.c stopwatch.c -o main -ggdb -O0 -lnotcurses -lnotcurses-core
+g++ main.c helpers.c -o main -ggdb -O0 -lnotcurses -lnotcurses-core
