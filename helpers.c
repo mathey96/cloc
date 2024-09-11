@@ -1,6 +1,18 @@
 #include "helpers.h"
 #include <stdarg.h>
 
+int
+first_digit(int num){
+	int digit = num / 10;
+	return digit;
+}
+
+int
+last_digit(int num){
+	int digit = num % 10;
+	return digit;
+}
+
 #define DIG2EQ(DIG) digit_2 == (DIG)
 
 // check if digit num is equal to any of the given variadic args

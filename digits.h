@@ -1,5 +1,4 @@
 #include <notcurses/notcurses.h>
-#include <ncpp/NotCurses.hh>
 #include "fonts/mono9.h"
 #include "fonts/mini.h"
 #include "fonts/standard.h"
@@ -23,15 +22,15 @@ typedef struct font {
 	int correct_offset;
 } font;
 
-font font_standard_font = {&font_standard, &calculate_offset_standard, &offset_before_twodots_standard, &offset_after_twodots_standard, 7, NO_OFFSET};
-font font_mono9_font	= {&font_mono9, &calculate_offset_mono9, &offset_before_twodots_mono9, &offset_after_twodots_mono9, 6, NO_OFFSET};
-font font_mini_font		= {&font_mini, &calculate_offset_mini, &offset_before_twodots_mini, &offset_after_twodots_mini, 4, 15};
-font font_lean_font  =    {&font_lean, &calculate_offset_lean, &offset_before_twodots_lean, &offset_after_twodots_lean, 6, -5};
-font font_mono12_font =   {&font_mono12, &calculate_offset_mono12, &offset_before_twodots_mono12, &offset_after_twodots_mono12, 7, -10};
-font font_smmono12_font = {&font_smmono12, &calculate_offset_smmono12, &offset_before_twodots_smmono12, &offset_after_twodots_smmono12, 7, 0};
-font font_smscript_font = {&font_smscript, &calculate_offset_smscript, &offset_before_twodots_smscript, &offset_after_twodots_smscript, 5, 5};
-font font_smshadow_font = {&font_smshadow, &calculate_offset_smshadow, &offset_before_twodots_smshadow, &offset_after_twodots_smshadow, 4, 5};
-font font_smslant_font =  {&font_smslant, &calculate_offset_smslant, &offset_before_twodots_smslant, &offset_after_twodots_smslant, 5, 5};
+const font font_standard_font = {&font_standard, &calculate_offset_standard, &offset_before_twodots_standard, &offset_after_twodots_standard, 7, NO_OFFSET};
+const font font_mono9_font    = {&font_mono9, &calculate_offset_mono9, &offset_before_twodots_mono9, &offset_after_twodots_mono9, 6, NO_OFFSET};
+const font font_mini_font     = {&font_mini, &calculate_offset_mini, &offset_before_twodots_mini, &offset_after_twodots_mini, 4, 15};
+const font font_lean_font     = {&font_lean, &calculate_offset_lean, &offset_before_twodots_lean, &offset_after_twodots_lean, 6, -5};
+const font font_mono12_font   = {&font_mono12, &calculate_offset_mono12, &offset_before_twodots_mono12, &offset_after_twodots_mono12, 7, -10};
+const font font_smmono12_font = {&font_smmono12, &calculate_offset_smmono12, &offset_before_twodots_smmono12, &offset_after_twodots_smmono12, 7, 0};
+const font font_smscript_font = {&font_smscript, &calculate_offset_smscript, &offset_before_twodots_smscript, &offset_after_twodots_smscript, 5, 5};
+const font font_smshadow_font = {&font_smshadow, &calculate_offset_smshadow, &offset_before_twodots_smshadow, &offset_after_twodots_smshadow, 4, 5};
+const font font_smslant_font  = {&font_smslant, &calculate_offset_smslant, &offset_before_twodots_smslant, &offset_after_twodots_smslant, 5, 5};
 
 font fonts[9] =
 {font_standard_font,  font_mono9_font,  font_mono12_font, font_smmono12_font, font_lean_font, font_mini_font, font_smscript_font, font_smshadow_font, font_smslant_font};

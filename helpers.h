@@ -1,16 +1,7 @@
 #include <stdio.h>
 
-inline int
-first_digit(int num){
-	int digit = num / 10;
-	return digit;
-}
-
-inline int
-last_digit(int num){
-	int digit = num % 10;
-	return digit;
-}
+int first_digit(int num);
+int last_digit(int num);
 
 int calculate_offset2(int digit_1, int digit_2);
 
