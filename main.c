@@ -74,15 +74,14 @@
 \
 }while(0) \
 
-
-
-static pthread_cond_t cond_bool = PTHREAD_COND_INITIALIZER;
-
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t mutex_tick = PTHREAD_MUTEX_INITIALIZER;
 
+static pthread_mutex_t mutex_reset = PTHREAD_MUTEX_INITIALIZER;
+
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 bool tick_thread_done = false;
+bool tick_thread_reset = false;
 
 static pthread_t thread_id_input;
 static pthread_t thread_id_tick;
@@ -92,15 +91,8 @@ long long current_time_millis() {
     gettimeofday(&tv, NULL);
     return (long long) ( (tv.tv_usec / 1000));
 }
-int truncate_last_num(int num){
-	if(num >= 1000){
-		fprintf(stderr,"jbg\n");
-		exit(-1);
-		}
-	else{
-	return num / 10;
-	}
-}
+
+int current_ms_twodigits = 0;
 
 void* current_tick (void* arg){
 	long long tick = 0;
@@ -108,19 +100,26 @@ void* current_tick (void* arg){
 		if(tick != current_time_millis()){
 			pthread_mutex_lock(&mutex_tick);
 			tick = current_time_millis();
-			current_ms = truncate_last_num(tick);
-			if(tick == 999)
+			current_ms++;
+			current_ms_twodigits = current_ms / 10;
+			if(current_ms == 999){
+				current_ms = 0;
+				current_ms_twodigits = 0;
 				current_sec++;
+			}
 			if(current_sec >= 59){
-				current_min++;
+				current_ms = 0;
+				current_ms_twodigits = 0;
 				current_sec = 0;
-				}
+				current_min++;
+			}
 
 			pthread_cond_signal(&cond);  // Signal the condition variable
 			pthread_mutex_unlock(&mutex_tick);
 		}
-		if(tick_thread_done == true)
+		if(tick_thread_done == true){
 			pthread_exit(NULL);
+		}
 	}
 }
 
@@ -177,25 +176,31 @@ handle_input(void* arg){
 				CUR_MODE = STOPWATCH_MODE;
 				PREV_MODE = CLOCK_MODE;
 			}
-			/* else if(CUR_MODE != CLOCK_MODE && PREV_MODE == STOPWATCH_MODE){ */
-			/* 	fprintf(stderr,"tick thread joined\n"); */
-			/* 	PREV_MODE = STOPWATCH_MODE; */
-			/* 	tick_thread_done = true; */
-			/* } */
+		}
+		if(id == 'r'){
+			if(CUR_MODE == STOPWATCH_MODE){
+				tick_thread_reset = true;
+				tick_thread_done = true;
+				if(pthread_join(thread_id_tick, NULL) != 0){
+					exit(-1);
+				}
+				current_sec = 0;
+				current_ms = 0;
+				current_min = 0;
+				tick_thread_done = false;
+
+				if(pthread_create(&thread_id_tick, NULL, &current_tick, NULL) != 0){
+					exit(-1);
+				}
+
+			}
 		}
 		if(id == 'c'){
 			if(CUR_MODE == STOPWATCH_MODE){
-            pthread_mutex_lock(&mutex);
-			tick_thread_done = true;
-            pthread_cond_signal(&cond);  // Signal the condition variable
-            pthread_mutex_unlock(&mutex);
-			CUR_MODE = CLOCK_MODE;
-			if(pthread_join(thread_id_tick, NULL) != 0){
+				PREV_MODE = CUR_MODE;
+				CUR_MODE = CLOCK_MODE;
 			}
-
-
-			}
-			}
+		}
 	}
 	return NULL;
 }
@@ -248,20 +253,6 @@ int main(){
 		unsigned int y = 0 , x =0;
 		if(CUR_MODE == STOPWATCH_MODE)
 			pthread_cond_wait(&cond, &mutex);  // Wait until the condition variable is signaled
-		/* if(current_ms == 999){ */
-		/* 	pthread_mutex_lock(&mutex); */
-		/* 	current_ms = 0; */
-		/* 	current_sec++; */
-		/* 	pthread_mutex_unlock(&mutex); */
-		/* 	fprintf(stderr,"sekund: %d",current_min); */
-		/* } */
-		/* if( current_sec == 60){ */
-		/* 	pthread_mutex_lock(&mutex); */
-		/* 	current_sec = 0; */
-		/* 	current_min++; */
-		/* 	pthread_mutex_unlock(&mutex); */
-		/* 	fprintf(stderr,"minut: %d",current_min); */
-		/* 	} */
 
 		// take dimensions of the screen, and third of the screen, to be used to center the output
 		notcurses_stddim_yx(nc, &y, &x);
@@ -280,11 +271,11 @@ int main(){
 
 		if(CUR_MODE == CLOCK_MODE){
 		display_cloc(nc, stdplane, x_offset, y_center,
-					local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
+					 local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
 		}
 		else if(CUR_MODE == STOPWATCH_MODE){
 		display_cloc(nc, stdplane, x_offset, y_center,
-					current_min, current_sec, current_ms, fonts[font_number]);
+				     current_min, current_sec, current_ms_twodigits, fonts[font_number]);
 		}
 
 
