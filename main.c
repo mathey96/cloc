@@ -326,7 +326,9 @@ int main(){
 		// to first argument of  OFFSET_DEBUG
 
 		// MACRO THAT IS USED TO DEBUG SCREEN RESIZE EVENTS. UNCOMMENT IF YOU'RE WORKING ON THIS
+#ifdef DEBUG_MODE
 		SCREENSIZE;
+#endif
 
 	   /* 	OFFSET_BEFORE_TWODOTS(8, */
        /* 7,  6, 7, 7, 7, 7, 7, 6, 7, 7); */
