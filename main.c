@@ -74,6 +74,8 @@
 \
 }while(0) \
 
+#ifdef DEBUG_MODE
+
 #define SCREENSIZE do{							\
 	 char xchar[100] ;							\
 	 char ychar[100] ;							\
@@ -89,6 +91,8 @@
 	 ncplane_putstr(stdplane,fonts[font_number].font_name);	\
 	 ncplane_cursor_move_yx(stdplane, 0, 0);				 \
 	 }while(0)									\
+
+#endif
 
 
 
@@ -268,15 +272,14 @@ void display_cloc(struct notcurses* nc, struct ncplane* plane,int x_offset, int 
 		table[last_digit((second))] (plane,  x_offset , y_center, cur_font);
 }
 
-int screen_adjust(font cur_font, int x_size, int y_size, int* x_center, int* y_center) {
-	if ( y_size < cur_font.y_screen_size){
+int screen_adjust(font* cur_font, int x_size, int y_size, int* x_center, int* y_center) {
+	if ( y_size < cur_font->y_screen_size){
 		*y_center = *y_center/5;
 	}
-	if ( x_size < cur_font.x_screen_size){
+	if ( x_size < cur_font->x_screen_size){
 		*x_center = *x_center/5;
 	}
 }
-
 
 int main(){
 	struct tm* local;
@@ -307,7 +310,7 @@ int main(){
 		unsigned y_center = y / 3 + 1;
 		unsigned x_center = x / 3;
 
-		screen_adjust(fonts[font_number], x, y, &x_center, &y_center);
+		screen_adjust(&fonts[font_number], x, y, &x_center, &y_center);
 
 		ncplane_erase(stdplane);
 		/* fprintf(stderr, "ovo je x_offset: %d, y_offset: %d\n", x_center, y_center); */
