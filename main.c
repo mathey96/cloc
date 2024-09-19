@@ -119,12 +119,13 @@ int tick_counter = 0;
 void* current_tick (void* arg){
 	long long tick = 0;
 	while(1){
-		if(tick != current_time_millis() && paused == false){
+		if(tick != current_time_millis() ){
 			pthread_mutex_lock(&mutex_tick);
 			tick = current_time_millis();
-			current_ms++;
-			current_ms_twodigits = current_ms / 10;
-			tick_counter++;
+			if (paused == false){
+				current_ms++;
+				current_ms_twodigits = current_ms / 10;
+				tick_counter++;
 			if(current_ms == 999){
 				current_ms = 0;
 				current_ms_twodigits = 0;
@@ -138,6 +139,7 @@ void* current_tick (void* arg){
 				current_ms_twodigits = 0;
 				current_sec = 0;
 				current_min++;
+			}
 			}
 
 			pthread_cond_signal(&cond);  // Signal the condition variable
@@ -214,6 +216,7 @@ handle_input(void* arg){
 				}
 				current_sec = 0;
 				current_ms = 0;
+				current_ms_twodigits = 0;
 				current_min = 0;
 
 				if(pthread_create(&thread_id_tick, NULL, &current_tick, NULL) != 0){
@@ -239,42 +242,41 @@ handle_input(void* arg){
 }
 
 
-void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
+void display_cloc(struct notcurses* nc, struct ncplane* plane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 
 		x_offset = x_offset + cur_font.correct_offset;
 		if(x_offset < 0)
 			x_offset = 0; // some fonts have negative correct_offsets, which will cause unwanted graphical problems. This is a tiny fix.
-		table[first_digit((hour))](stdplane, x_offset , y_center, cur_font);
+		table[first_digit((hour))](plane, x_offset , y_center, cur_font);
 		x_offset = cur_font.calculate_offset(first_digit(hour),last_digit(hour)) + x_offset;
-		table[last_digit((hour))] (stdplane, x_offset, y_center, cur_font);
+		table[last_digit((hour))] (plane, x_offset, y_center, cur_font);
 
 		x_offset = x_offset + cur_font.offset_before_twodots(last_digit(hour));
-		table[TWO_DOTS](stdplane, x_offset, y_center,cur_font );
+		table[TWO_DOTS](plane, x_offset, y_center,cur_font );
 		x_offset = x_offset + cur_font.offset_after_twodots(first_digit(minute));
 
-		table[first_digit((minute))](stdplane, x_offset , y_center, cur_font);
+		table[first_digit((minute))](plane, x_offset , y_center, cur_font);
 		x_offset = x_offset + cur_font.calculate_offset(first_digit(minute),last_digit(minute));
-		table[last_digit((minute))] (stdplane, x_offset, y_center, cur_font);
+		table[last_digit((minute))] (plane, x_offset, y_center, cur_font);
 
 		x_offset = x_offset + cur_font.offset_before_twodots(last_digit(last_digit(minute)));;
-		table[TWO_DOTS](stdplane, x_offset, y_center, cur_font);
+		table[TWO_DOTS](plane, x_offset, y_center, cur_font);
 		x_offset = x_offset + cur_font.offset_after_twodots(first_digit(second));;
 
-		table[first_digit((second))](stdplane, x_offset , y_center, cur_font);
+		table[first_digit((second))](plane, x_offset , y_center, cur_font);
 		x_offset = x_offset + cur_font.calculate_offset(first_digit(second),last_digit(second));
-		table[last_digit((second))] (stdplane,  x_offset , y_center, cur_font);
+		table[last_digit((second))] (plane,  x_offset , y_center, cur_font);
 }
 
 int screen_adjust(font cur_font, int x_size, int y_size, int* x_center, int* y_center) {
 	if ( y_size < cur_font.y_screen_size){
-		/* *y_center = 0; */
-		*y_center = 0;
+		*y_center = *y_center/5;
 	}
 	if ( x_size < cur_font.x_screen_size){
-		/* *x_center = 0; */
-		*x_center = 0;
+		*x_center = *x_center/5;
 	}
 }
+
 
 int main(){
 	struct tm* local;

@@ -612,11 +612,11 @@ int calculate_offset_smslant(int digit_1, int digit_2){
 	switch(digit_1){
 		case 0:
 		case 1:
-				return 6;
+			if (DIG2EQ(3)) return 5;
+			else return 6;
 		case 2:
 			if(is_in_set(digit_2, 5, 0, 2, 3, 4 ,5))
 				return 7;
-			else return 7;
     	case 3:
 			return 7;
 	    case 4:
