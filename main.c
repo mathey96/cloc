@@ -83,6 +83,7 @@ static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 bool tick_thread_done = true;
 bool tick_thread_reset = false;
 bool tick_thread_started = false;
+bool paused = false;
 
 static pthread_t thread_id_input;
 static pthread_t thread_id_tick;
@@ -100,7 +101,7 @@ int tick_counter = 0;
 void* current_tick (void* arg){
 	long long tick = 0;
 	while(1){
-		if(tick != current_time_millis()){
+		if(tick != current_time_millis() && paused == false){
 			pthread_mutex_lock(&mutex_tick);
 			tick = current_time_millis();
 			current_ms++;
@@ -204,6 +205,11 @@ handle_input(void* arg){
 
 			}
 		}
+		if(id == ' '){
+			if (paused == false) paused = true;
+			else paused = false;
+		}
+
 		if(id == 'c'){
 			if(CUR_MODE == STOPWATCH_MODE){
 				PREV_MODE = CUR_MODE;
