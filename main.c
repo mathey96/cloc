@@ -74,6 +74,24 @@
 \
 }while(0) \
 
+#define SCREENSIZE do{							\
+	 char xchar[100] ;							\
+	 char ychar[100] ;							\
+	 snprintf(xchar, 1000, "%d", x);			\
+	 snprintf(ychar, 1000, "%d", y);			\
+	 ncplane_cursor_move_yx(stdplane,0, 0);		\
+	 ncplane_putstr(stdplane,"X:");				\
+	 ncplane_putstr(stdplane,xchar);			\
+	 ncplane_putstr(stdplane,"Y:");				\
+	 ncplane_putstr(stdplane,ychar);			\
+	 ncplane_cursor_move_yx(stdplane, 1, 0);					\
+	 ncplane_putstr(stdplane,"current font is: ");			\
+	 ncplane_putstr(stdplane,fonts[font_number].font_name);	\
+	 ncplane_cursor_move_yx(stdplane, 0, 0);				 \
+	 }while(0)									\
+
+
+
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t mutex_tick = PTHREAD_MUTEX_INITIALIZER;
 
@@ -222,7 +240,10 @@ handle_input(void* arg){
 
 
 void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
+
 		x_offset = x_offset + cur_font.correct_offset;
+		if(x_offset < 0)
+			x_offset = 0; // some fonts have negative correct_offsets, which will cause unwanted graphical problems. This is a tiny fix.
 		table[first_digit((hour))](stdplane, x_offset , y_center, cur_font);
 		x_offset = cur_font.calculate_offset(first_digit(hour),last_digit(hour)) + x_offset;
 		table[last_digit((hour))] (stdplane, x_offset, y_center, cur_font);
@@ -244,6 +265,17 @@ void display_cloc(struct notcurses* nc, struct ncplane* stdplane,int x_offset, i
 		table[last_digit((second))] (stdplane,  x_offset , y_center, cur_font);
 }
 
+int screen_adjust(font cur_font, int x_size, int y_size, int* x_center, int* y_center) {
+	if ( y_size < cur_font.y_screen_size){
+		/* *y_center = 0; */
+		*y_center = 0;
+	}
+	if ( x_size < cur_font.x_screen_size){
+		/* *x_center = 0; */
+		*x_center = 0;
+	}
+}
+
 int main(){
 	struct tm* local;
 	/* time_t t = time(NULL); */
@@ -255,7 +287,6 @@ int main(){
 	}
 	struct ncplane* stdplane = notcurses_stdplane(nc);
 
-	ncplane_cursor_move_yx(stdplane, 50, 0);
     if(pthread_create(&thread_id_input, NULL, &handle_input, nc)){
 		exit(-1);
 		return -1;
@@ -274,29 +305,28 @@ int main(){
 		unsigned y_center = y / 3 + 1;
 		unsigned x_center = x / 3;
 
-
-		if ( x <= 60) // handling windows resizing
-			x_center = 0;
-		else if ( y < 25)
-			y_center = 0;
+		screen_adjust(fonts[font_number], x, y, &x_center, &y_center);
 
 		ncplane_erase(stdplane);
-
-		int x_offset = x_center; /// beggining
+		/* fprintf(stderr, "ovo je x_offset: %d, y_offset: %d\n", x_center, y_center); */
 
 		if(CUR_MODE == CLOCK_MODE){
-		display_cloc(nc, stdplane, x_offset, y_center,
+		display_cloc(nc, stdplane, x_center, y_center,
 					 local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
 		}
 		else if(CUR_MODE == STOPWATCH_MODE){
-		display_cloc(nc, stdplane, x_offset, y_center,
+		display_cloc(nc, stdplane, x_center, y_center,
 				     current_min, current_sec, current_ms_twodigits, fonts[font_number]);
 		}
+
 
 
 		// uncomment these macros and comment out display_cloc call if you want to debug and display
 		// offset (spacing) before two dots, offset between numbers and offset after two dots by passing TWO_DOTS
 		// to first argument of  OFFSET_DEBUG
+
+		// MACRO THAT IS USED TO DEBUG SCREEN RESIZE EVENTS. UNCOMMENT IF YOU'RE WORKING ON THIS
+		SCREENSIZE;
 
 	   /* 	OFFSET_BEFORE_TWODOTS(8, */
        /* 7,  6, 7, 7, 7, 7, 7, 6, 7, 7); */
