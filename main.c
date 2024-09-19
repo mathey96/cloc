@@ -78,13 +78,15 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t mutex_tick = PTHREAD_MUTEX_INITIALIZER;
 
 static pthread_mutex_t mutex_reset = PTHREAD_MUTEX_INITIALIZER;
-
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
-bool tick_thread_done = false;
+
+bool tick_thread_done = true;
 bool tick_thread_reset = false;
+bool tick_thread_started = false;
 
 static pthread_t thread_id_input;
 static pthread_t thread_id_tick;
+
 
 long long current_time_millis() {
     struct timeval tv;
@@ -93,6 +95,7 @@ long long current_time_millis() {
 }
 
 int current_ms_twodigits = 0;
+int tick_counter = 0;
 
 void* current_tick (void* arg){
 	long long tick = 0;
@@ -102,12 +105,16 @@ void* current_tick (void* arg){
 			tick = current_time_millis();
 			current_ms++;
 			current_ms_twodigits = current_ms / 10;
+			tick_counter++;
 			if(current_ms == 999){
 				current_ms = 0;
 				current_ms_twodigits = 0;
-				current_sec++;
 			}
-			if(current_sec >= 59){
+			if( tick_counter == 1000){
+				current_sec++;
+				tick_counter = 0;
+			}
+			if(current_sec == 60){
 				current_ms = 0;
 				current_ms_twodigits = 0;
 				current_sec = 0;
@@ -118,11 +125,11 @@ void* current_tick (void* arg){
 			pthread_mutex_unlock(&mutex_tick);
 		}
 		if(tick_thread_done == true){
+			tick_thread_started = false;
 			pthread_exit(NULL);
 		}
 	}
 }
-
 
 enum MODE {
 	CLOCK_MODE = 0,
@@ -168,18 +175,20 @@ handle_input(void* arg){
 				font_number = MAX_FONT_NUM;
 		}
 		if(id == 's'){
-			if(CUR_MODE == CLOCK_MODE){
-				if(pthread_create(&thread_id_tick, NULL, &current_tick, NULL) != 0){
-					exit(-1);
+			if(CUR_MODE == CLOCK_MODE) {
+				if(tick_thread_started == false){
+					tick_thread_done = false;
+					tick_thread_started = true;
+					if(pthread_create(&thread_id_tick, NULL, &current_tick, NULL) != 0){
+						exit(-1);
+					}
 				}
-				tick_thread_done = false;
+				PREV_MODE = CUR_MODE;
 				CUR_MODE = STOPWATCH_MODE;
-				PREV_MODE = CLOCK_MODE;
 			}
 		}
 		if(id == 'r'){
 			if(CUR_MODE == STOPWATCH_MODE){
-				tick_thread_reset = true;
 				tick_thread_done = true;
 				if(pthread_join(thread_id_tick, NULL) != 0){
 					exit(-1);
@@ -187,11 +196,11 @@ handle_input(void* arg){
 				current_sec = 0;
 				current_ms = 0;
 				current_min = 0;
-				tick_thread_done = false;
 
 				if(pthread_create(&thread_id_tick, NULL, &current_tick, NULL) != 0){
 					exit(-1);
 				}
+				tick_thread_done = false;
 
 			}
 		}
