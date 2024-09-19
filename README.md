@@ -11,7 +11,9 @@ figlet fonts should be located at:
 /usr/share/figlet
 
 ## TODO
- - [ ] handle input
+ - [X] handle input
  - [ ] handle windows size
- - [ ] use multiple figlet fonts and UTF8 chars
- - [ ] implement timer
+ - [X] use multiple figlet fonts and UTF8 chars
+ - [X] implement timer
+ - [ ] fix timer precision
+ - [ ] config file?
