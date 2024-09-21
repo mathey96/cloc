@@ -3,6 +3,9 @@
 #include <pthread.h>
 #include "stopwatch.h"
 
+static int current_ms = 0;
+static int current_sec = 0;
+static int current_min = 0;
 
 #define TWO_DOTS 10
 
@@ -79,8 +82,8 @@
 #define SCREENSIZE do{							\
 	 char xchar[100] ;							\
 	 char ychar[100] ;							\
-	 snprintf(xchar, 1000, "%d", x);			\
-	 snprintf(ychar, 1000, "%d", y);			\
+	 snprintf(xchar, 100, "%d", x);			\
+	 snprintf(ychar, 100, "%d", y);			\
 	 ncplane_cursor_move_yx(stdplane,0, 0);		\
 	 ncplane_putstr(stdplane,"X:");				\
 	 ncplane_putstr(stdplane,xchar);			\
@@ -99,7 +102,6 @@
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t mutex_tick = PTHREAD_MUTEX_INITIALIZER;
 
-static pthread_mutex_t mutex_reset = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 bool tick_thread_done = true;
@@ -120,7 +122,7 @@ long long current_time_millis() {
 int current_ms_twodigits = 0;
 int tick_counter = 0;
 
-void* current_tick (void* arg){
+void* current_tick (void* ){
 	long long tick = 0;
 	while(1){
 		if(tick != current_time_millis() ){
@@ -156,23 +158,22 @@ void* current_tick (void* arg){
 	}
 }
 
-enum MODE {
+typedef enum MODE {
 	CLOCK_MODE = 0,
 	STOPWATCH_MODE
-};
+} MODE;
 
-int PREV_MODE = CLOCK_MODE;
-int CUR_MODE = CLOCK_MODE;
+MODE PREV_MODE = CLOCK_MODE;
+MODE CUR_MODE = CLOCK_MODE;
 
 bool thread_done = false;
-static int font_number = 0;
+static unsigned font_number = 0;
 
 static void *
 handle_input(void* arg){
 	ncinput ni;
     struct notcurses* nc = (struct notcurses*)arg;
 	uint32_t id;
-	struct ncplane* stdplane = notcurses_stdplane(nc);
 
 	while((id = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){
 		if(id == 0){
@@ -246,7 +247,7 @@ handle_input(void* arg){
 }
 
 
-void display_cloc(struct notcurses* nc, struct ncplane* plane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
+void display_cloc( struct ncplane* plane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 
 		x_offset = x_offset + cur_font.correct_offset;
 		if(x_offset < 0)
@@ -272,13 +273,14 @@ void display_cloc(struct notcurses* nc, struct ncplane* plane,int x_offset, int 
 		table[last_digit((second))] (plane,  x_offset , y_center, cur_font);
 }
 
-int screen_adjust(font* cur_font, int x_size, int y_size, int* x_center, int* y_center) {
+int screen_adjust(font* cur_font, int x_size, int y_size, unsigned* x_center, unsigned* y_center) {
 	if ( y_size < cur_font->y_screen_size){
 		*y_center = *y_center/5;
 	}
 	if ( x_size < cur_font->x_screen_size){
 		*x_center = *x_center/5;
 	}
+	return 0;
 }
 
 int main(){
@@ -316,11 +318,11 @@ int main(){
 		/* fprintf(stderr, "ovo je x_offset: %d, y_offset: %d\n", x_center, y_center); */
 
 		if(CUR_MODE == CLOCK_MODE){
-		display_cloc(nc, stdplane, x_center, y_center,
+		display_cloc(stdplane, x_center, y_center,
 					 local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
 		}
 		else if(CUR_MODE == STOPWATCH_MODE){
-		display_cloc(nc, stdplane, x_center, y_center,
+		display_cloc(stdplane, x_center, y_center,
 				     current_min, current_sec, current_ms_twodigits, fonts[font_number]);
 		}
 
@@ -331,6 +333,7 @@ int main(){
 		// to first argument of  OFFSET_DEBUG
 
 		// MACRO THAT IS USED TO DEBUG SCREEN RESIZE EVENTS. UNCOMMENT IF YOU'RE WORKING ON THIS
+
 #ifdef DEBUG_MODE
 		SCREENSIZE;
 #endif
