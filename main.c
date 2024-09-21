@@ -247,7 +247,7 @@ handle_input(void* arg){
 }
 
 
-void display_cloc( struct ncplane* plane,int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
+void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 
 		x_offset = x_offset + cur_font.correct_offset;
 		if(x_offset < 0)
@@ -283,16 +283,54 @@ int screen_adjust(font* cur_font, int x_size, int y_size, unsigned* x_center, un
 	return 0;
 }
 
+
+int x_center_std = 0;
+int y_center_std = 0;
+unsigned xstd,ystd;
+
+struct ncplane* stdplane;
+struct notcurses* nc;
+
+int resize_cb(struct ncplane* plane){
+	notcurses_stddim_yx(nc, &ystd, &xstd);
+	x_center_std = xstd/3 + 1;
+	y_center_std = ystd/3 + 1;
+	if( ystd > 15 && xstd > 70)
+		ncplane_move_yx(plane, y_center_std, x_center_std);
+	if(xstd < 70 )
+		ncplane_move_yx(plane, y_center_std, 0);
+	if( ystd < 15 && xstd > 70)
+		ncplane_move_yx(plane, 0, x_center_std);
+	if( ystd < 15 && xstd < 70)
+		ncplane_move_yx(plane, 0, 0);
+
+	return 0;
+}
+
 int main(){
 	struct tm* local;
 	/* time_t t = time(NULL); */
 
 	struct notcurses_options opts = {0}; // man notcurses_init(3)
-	struct notcurses* nc = notcurses_init(&opts, stdout);
+	nc = notcurses_init(&opts, stdout);
 	if(nc == NULL){
 		return EXIT_FAILURE;
 	}
-	struct ncplane* stdplane = notcurses_stdplane(nc);
+	stdplane = notcurses_stdplane(nc);
+
+	notcurses_stddim_yx(nc, &ystd, &xstd);
+	struct ncplane_options nopts = {
+		.y = ystd/3 +1,
+		.x = xstd/3 +1,
+			.rows = 150,
+			.cols = 150,
+			.name = "plot",
+				.resizecb = resize_cb,
+				/* .flags = NCPLANE_OPTION_FIXED, */
+				.margin_b = 0,
+				.margin_r = 0,
+				};
+	struct ncplane* clockplane = ncplane_create(stdplane, &nopts);
 
     if(pthread_create(&thread_id_input, NULL, &handle_input, nc)){
 		exit(-1);
@@ -315,14 +353,15 @@ int main(){
 		screen_adjust(&fonts[font_number], x, y, &x_center, &y_center);
 
 		ncplane_erase(stdplane);
+		ncplane_erase(clockplane);
 		/* fprintf(stderr, "ovo je x_offset: %d, y_offset: %d\n", x_center, y_center); */
 
 		if(CUR_MODE == CLOCK_MODE){
-		display_cloc(stdplane, x_center, y_center,
+		display_cloc(clockplane, 0, 0,
 					 local->tm_hour, local->tm_min, local->tm_sec, fonts[font_number]);
 		}
 		else if(CUR_MODE == STOPWATCH_MODE){
-		display_cloc(stdplane, x_center, y_center,
+		display_cloc(clockplane, 0, 0,
 				     current_min, current_sec, current_ms_twodigits, fonts[font_number]);
 		}
 
