@@ -82,12 +82,12 @@ static int current_min = 0;
 #define SCREENSIZE do{							\
 	 char xchar[100] ;							\
 	 char ychar[100] ;							\
-	 snprintf(xchar, 100, "%d", x);			\
-	 snprintf(ychar, 100, "%d", y);			\
+	 snprintf(xchar, 100, "%d", xstd);			\
+	 snprintf(ychar, 100, "%d", ystd);			\
 	 ncplane_cursor_move_yx(stdplane,0, 0);		\
 	 ncplane_putstr(stdplane,"X:");				\
 	 ncplane_putstr(stdplane,xchar);			\
-	 ncplane_putstr(stdplane,"Y:");				\
+	 ncplane_putstr(stdplane," Y:");				\
 	 ncplane_putstr(stdplane,ychar);			\
 	 ncplane_cursor_move_yx(stdplane, 1, 0);					\
 	 ncplane_putstr(stdplane,"current font is: ");			\
@@ -112,6 +112,13 @@ bool paused = false;
 static pthread_t thread_id_input;
 static pthread_t thread_id_tick;
 
+int x_center = 0;
+int y_center = 0;
+unsigned xstd,ystd;
+
+struct ncplane* stdplane;
+struct ncplane* clockplane;
+struct notcurses* nc;
 
 long long current_time_millis() {
     struct timeval tv;
@@ -160,7 +167,8 @@ void* current_tick (void* ){
 
 typedef enum MODE {
 	CLOCK_MODE = 0,
-	STOPWATCH_MODE
+	STOPWATCH_MODE,
+	HELP_MODE
 } MODE;
 
 MODE PREV_MODE = CLOCK_MODE;
@@ -201,7 +209,7 @@ handle_input(void* arg){
 				font_number = MAX_FONT_NUM;
 		}
 		if(id == 's'){
-			if(CUR_MODE == CLOCK_MODE) {
+			if(CUR_MODE != STOPWATCH_MODE) {
 				if(tick_thread_started == false){
 					tick_thread_done = false;
 					tick_thread_started = true;
@@ -237,15 +245,49 @@ handle_input(void* arg){
 		}
 
 		if(id == 'c'){
-			if(CUR_MODE == STOPWATCH_MODE){
+			if(CUR_MODE != CLOCK_MODE){
 				PREV_MODE = CUR_MODE;
 				CUR_MODE = CLOCK_MODE;
 			}
+		}
+
+		if(id == NCKEY_UP){
+			ncplane_move_rel(clockplane, -1, 0);
+		}
+		if(id == NCKEY_DOWN){
+			ncplane_move_rel(clockplane, 1, 0);
+		}
+		if(id == NCKEY_LEFT){
+			ncplane_move_rel(clockplane, 0, -1);
+		}
+		if(id == NCKEY_RIGHT){
+			ncplane_move_rel(clockplane, 0, 1);
+		}
+		if(id == 'h'){
+			if(CUR_MODE != HELP_MODE){
+				PREV_MODE = CUR_MODE;
+				CUR_MODE = HELP_MODE;
+				}
+			else CUR_MODE = PREV_MODE;
 		}
 	}
 	return NULL;
 }
 
+void display_help(struct ncplane* plane){
+	ncplane_putstr_yx(plane, 1, 1, "this is the help menu. Press h again to resume to normal application\n");
+	ncplane_putstr_yx(plane, 2, 1, "🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕡🕖🕢🕗🕣🕘🕤🕙");
+	ncplane_putstr_yx(plane, 4, 1, "q - quit\n");
+	ncplane_putstr_yx(plane, 5, 1, "n - to change to next font \n");
+	ncplane_putstr_yx(plane, 6, 1, "p - to change to previous font \n");
+	ncplane_putstr_yx(plane, 7, 1, "s - stopwatch mode");
+	ncplane_putstr_yx(plane, 8, 1, "r - reset stopwatch");
+	ncplane_putstr_yx(plane, 9, 1, "SPACE - pause stopwatch");
+	ncplane_putstr_yx(plane, 10, 1, "c - clock mode");
+	ncplane_putstr_yx(plane, 11, 1, "h - help menu");
+	ncplane_putstr_yx(plane, 12, 1, "⬆️ ➡️ ⬇️ ⬅️ - move the clock plane");
+
+};
 
 void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 
@@ -273,14 +315,6 @@ void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, i
 		table[last_digit((second))] (plane,  x_offset , y_center, cur_font);
 }
 
-
-
-int x_center = 0;
-int y_center = 0;
-unsigned xstd,ystd;
-
-struct ncplane* stdplane;
-struct notcurses* nc;
 
 int resize_cb(struct ncplane* plane){
 	notcurses_stddim_yx(nc, &ystd, &xstd);
@@ -321,7 +355,7 @@ int main(){
 		.margin_b = 0,
 		.margin_r = 0,
 	};
-	struct ncplane* clockplane = ncplane_create(stdplane, &nopts);
+	clockplane = ncplane_create(stdplane, &nopts);
 
     if(pthread_create(&thread_id_input, NULL, &handle_input, nc)){
 		exit(-1);
@@ -349,6 +383,9 @@ int main(){
 		display_cloc(clockplane, 0, 0,
 				     current_min, current_sec, current_ms_twodigits, fonts[font_number]);
 		}
+		else if( CUR_MODE == HELP_MODE)
+			display_help(clockplane);
+
 
 
 #ifdef DEBUG_MODE
