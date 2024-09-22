@@ -273,19 +273,10 @@ void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, i
 		table[last_digit((second))] (plane,  x_offset , y_center, cur_font);
 }
 
-int screen_adjust(font* cur_font, int x_size, int y_size, unsigned* x_center, unsigned* y_center) {
-	if ( y_size < cur_font->y_screen_size){
-		*y_center = *y_center/5;
-	}
-	if ( x_size < cur_font->x_screen_size){
-		*x_center = *x_center/5;
-	}
-	return 0;
-}
 
 
-int x_center_std = 0;
-int y_center_std = 0;
+int x_center = 0;
+int y_center = 0;
 unsigned xstd,ystd;
 
 struct ncplane* stdplane;
@@ -293,14 +284,14 @@ struct notcurses* nc;
 
 int resize_cb(struct ncplane* plane){
 	notcurses_stddim_yx(nc, &ystd, &xstd);
-	x_center_std = xstd/3 + 1;
-	y_center_std = ystd/3 + 1;
+	x_center = xstd/3 ;
+	y_center = ystd/3 + 1;
 	if( ystd > 15 && xstd > 70)
-		ncplane_move_yx(plane, y_center_std, x_center_std);
+		ncplane_move_yx(plane, y_center, x_center);
 	if(xstd < 70 )
-		ncplane_move_yx(plane, y_center_std, 0);
+		ncplane_move_yx(plane, y_center, 0);
 	if( ystd < 15 && xstd > 70)
-		ncplane_move_yx(plane, 0, x_center_std);
+		ncplane_move_yx(plane, 0, x_center);
 	if( ystd < 15 && xstd < 70)
 		ncplane_move_yx(plane, 0, 0);
 
@@ -322,14 +313,14 @@ int main(){
 	struct ncplane_options nopts = {
 		.y = ystd/3 +1,
 		.x = xstd/3 +1,
-			.rows = 150,
-			.cols = 150,
-			.name = "plot",
-				.resizecb = resize_cb,
-				/* .flags = NCPLANE_OPTION_FIXED, */
-				.margin_b = 0,
-				.margin_r = 0,
-				};
+		.rows = 150,
+		.cols = 150,
+		.name = "plot",
+		.resizecb = resize_cb,
+		/* .flags = NCPLANE_OPTION_FIXED, */
+		.margin_b = 0,
+		.margin_r = 0,
+	};
 	struct ncplane* clockplane = ncplane_create(stdplane, &nopts);
 
     if(pthread_create(&thread_id_input, NULL, &handle_input, nc)){
@@ -341,20 +332,14 @@ int main(){
 		time_t t = time(NULL);
 		local = localtime(&t);
 		/* sleep(1); */
-		unsigned int y = 0 , x =0;
 		if(CUR_MODE == STOPWATCH_MODE)
 			pthread_cond_wait(&cond, &mutex);  // Wait until the condition variable is signaled
 
 		// take dimensions of the screen, and third of the screen, to be used to center the output
-		notcurses_stddim_yx(nc, &y, &x);
-		unsigned y_center = y / 3 + 1;
-		unsigned x_center = x / 3;
 
-		screen_adjust(&fonts[font_number], x, y, &x_center, &y_center);
 
 		ncplane_erase(stdplane);
 		ncplane_erase(clockplane);
-		/* fprintf(stderr, "ovo je x_offset: %d, y_offset: %d\n", x_center, y_center); */
 
 		if(CUR_MODE == CLOCK_MODE){
 		display_cloc(clockplane, 0, 0,
@@ -366,16 +351,13 @@ int main(){
 		}
 
 
-
-		// uncomment these macros and comment out display_cloc call if you want to debug and display
-		// offset (spacing) before two dots, offset between numbers and offset after two dots by passing TWO_DOTS
-		// to first argument of  OFFSET_DEBUG
-
-		// MACRO THAT IS USED TO DEBUG SCREEN RESIZE EVENTS. UNCOMMENT IF YOU'RE WORKING ON THIS
-
 #ifdef DEBUG_MODE
 		SCREENSIZE;
 #endif
+
+		// uncomment these following macros and comment out display_cloc call if you want to debug and display
+		// offset (spacing) before two dots, offset between numbers and offset after two dots by passing TWO_DOTS
+		// to first argument of  OFFSET_DEBUG
 
 	   /* 	OFFSET_BEFORE_TWODOTS(8, */
        /* 7,  6, 7, 7, 7, 7, 7, 6, 7, 7); */
