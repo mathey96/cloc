@@ -10,6 +10,8 @@ static int current_min = 0;
 #define TWO_DOTS 10
 
 #define MAX_FONT_NUM sizeof(fonts) / sizeof(fonts[0]) - 1
+#define SIZEOFARRAY(array) (sizeof(array) / sizeof(array[0]) - 1)
+
 #define OFFSET_DEBUG(NUM, FONTNUM, OFFSET0, OFFSET1, OFFSET2, OFFSET3, OFFSET4, OFFSET5, OFFSET6, OFFSET7, OFFSET8, OFFSET9) do{ \
 		table[(NUM)](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]);	\
 		table[0](stdplane, 0 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]);\
@@ -165,6 +167,13 @@ void* current_tick (void* ){
 	}
 }
 
+void
+fix_offset(struct ncplane* plane, int offset){
+    	ncplane_move_yx(plane, ystd/3 + 1, xstd/3);
+		ncplane_move_rel(plane, 0, offset);
+}
+
+
 typedef enum MODE {
 	CLOCK_MODE = 0,
 	STOPWATCH_MODE,
@@ -176,6 +185,17 @@ MODE CUR_MODE = CLOCK_MODE;
 
 bool thread_done = false;
 static unsigned font_number = 0;
+
+size_t color_index = 0;
+unsigned colors[] = {0x000000, 0xffffff, 0xe0b0b0, 0xa0ffff, 0xe0a0a0, 0x0a0a0a, 0x11ffff, 0xffffff, 0xffffff,
+					 0x80d0ff, 0xbde8f6, 0x40d0d0, 0x40d040, 0xe0b0b0, 0xd4af37, 0xffffff, 0xffffff, 0xf0f0a0,
+					 0xd78700, 0x40f040, 0x40f040, 0xffffff, 0xbbbbbb, 0xbbbbbb, 0x0     , 0x00dddd, 0x00bcaa,
+					 0x00bcaa, 0xff5349, 0xffffff, 0xffd700, 0x444444, 0x888888, 0x222222, 0xff00ff, 0x00ff00,
+					 0xff00ff, 0x00ff00, 0x808080, 0x444444, 0x888888, 0x444444, 0x444444, 0x444444, 0x00ffb0,
+					 0x00b0b0, 0xe0f0ff, 0xff6a00, 0xffffff};
+
+
+int changed_font = 1;
 
 static void *
 handle_input(void* arg){
@@ -201,12 +221,16 @@ handle_input(void* arg){
 				font_number++;
 			else
 				font_number = 0;
+
+			changed_font = 1;
 		}
 		if(id == 'p'){
 			if(font_number > 0)
 				font_number--;
 			else
 				font_number = MAX_FONT_NUM;
+
+			changed_font = 1;
 		}
 		if(id == 's'){
 			if(CUR_MODE != STOPWATCH_MODE) {
@@ -263,6 +287,19 @@ handle_input(void* arg){
 		if(id == NCKEY_RIGHT){
 			ncplane_move_rel(clockplane, 0, 1);
 		}
+		if (id == 'l'){
+				{
+						if(color_index < SIZEOFARRAY(colors)){
+								ncplane_set_fg_rgb(clockplane, colors[color_index]);
+								color_index++;
+						}
+						else if(color_index == SIZEOFARRAY(colors))
+							color_index = 0;
+				}
+						// gotta find a way to restore to default colors,
+				        // supposedly with notcurses_default_foreground(nc,&fg);
+						// or reset_term_attributes(ti, f); ?
+		}
 		if(id == 'h'){
 			if(CUR_MODE != HELP_MODE){
 				PREV_MODE = CUR_MODE;
@@ -291,9 +328,11 @@ void display_help(struct ncplane* plane){
 
 void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 
-		x_offset = x_offset + cur_font.correct_offset;
-		if(x_offset < 0)
-			x_offset = 0; // some fonts have negative correct_offsets, which will cause unwanted graphical problems. This is a tiny fix.
+		if(changed_font == 1){
+			changed_font = 0;
+			fix_offset(plane, fonts[font_number].correct_offset); // visually recentering clock plane whenever the font is changed
+		}
+		x_offset = x_offset;
 		table[first_digit((hour))](plane, x_offset , y_center, cur_font);
 		x_offset = cur_font.calculate_offset(first_digit(hour),last_digit(hour)) + x_offset;
 		table[last_digit((hour))] (plane, x_offset, y_center, cur_font);
@@ -317,6 +356,7 @@ void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, i
 
 
 int resize_cb(struct ncplane* plane){
+	changed_font = 1;
 	notcurses_stddim_yx(nc, &ystd, &xstd);
 	x_center = xstd/3 ;
 	y_center = ystd/3 + 1;

@@ -238,7 +238,7 @@ int offset_before_twodots_mini(int num){
 		return 4;
 		break;
 	case 4:
-		return 3;
+		return 4;
 	default:
 		fprintf(stderr, " wrong digit");
 		return -1;
