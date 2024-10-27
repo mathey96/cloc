@@ -1,4 +1,5 @@
 #include <time.h>
+#include <unistd.h>
 #include "digits.h"
 #include <pthread.h>
 #include "stopwatch.h"
@@ -130,6 +131,7 @@ bool paused = false;
 
 static pthread_t thread_id_input;
 static pthread_t thread_id_tick;
+static pthread_t animation;
 
 int x_center = 0;
 int y_center = 0;
@@ -184,10 +186,27 @@ void* current_tick (void* ){
 	}
 }
 
+bool animation_thread_on = false;
+
+void*
+animation_thread (void* ){
+	while(animation_thread_on == true){
+		ncplane_move_yx(clockplane, ystd/3 + 1, -15);
+		for (int i = 0; i < 200; i++){
+			if( animation_thread_on == false)
+				pthread_exit(NULL);
+			usleep(20000);
+			ncplane_move_rel(clockplane, 0, 1);
+		}
+		ncplane_move_yx(clockplane, ystd/3 + 1, -30);
+	}
+	pthread_exit(NULL);
+}
+
 void
 fix_offset(struct ncplane* plane, int offset){
-    	ncplane_move_yx(plane, ystd/3 + 1, xstd/3);
-		ncplane_move_rel(plane, 0, offset);
+	ncplane_move_yx(plane, ystd/3 + 1, xstd/3);
+	ncplane_move_rel(plane, 0, offset);
 }
 
 
@@ -299,16 +318,14 @@ handle_input(void* arg){
 			ncplane_move_rel(clockplane, 0, 1);
 		}
 		if (id == 'l'){
-				{
-						if(color_index < SIZEOFARRAY(colors)){
-								ncplane_set_fg_rgb(clockplane, colors[color_index]);
-								color_index++;
-						}
-						else if(color_index == SIZEOFARRAY(colors)){
-							ncplane_erase(clockplane);
-							color_index = 0;
-							}
-				}
+			if(color_index < SIZEOFARRAY(colors)){
+					ncplane_set_fg_rgb(clockplane, colors[color_index]);
+					color_index++;
+			}
+			else if(color_index == SIZEOFARRAY(colors)){
+					ncplane_erase(clockplane);
+					color_index = 0;
+			}
 						// gotta find a way to restore to default colors,
 				        // supposedly with notcurses_default_foreground(nc,&fg);
 						// or reset_term_attributes(ti, f); ?
@@ -317,8 +334,25 @@ handle_input(void* arg){
 			if(CUR_MODE != HELP_MODE){
 				PREV_MODE = CUR_MODE;
 				CUR_MODE = HELP_MODE;
-				}
+			}
 			else CUR_MODE = PREV_MODE;
+		}
+		if(id == 'a'){
+			if(animation_thread_on == false){
+				animation_thread_on = true;
+				if(pthread_create(&animation, NULL, &animation_thread, NULL) != 0){
+					exit(-1);
+				}
+			}
+			else{
+				animation_thread_on = false;
+				if(pthread_join(animation, NULL) != 0){
+					notcurses_stop(nc);
+					exit(-1);
+				}
+				fix_offset(clockplane, 0);
+
+			}
 		}
 	}
 	return NULL;
