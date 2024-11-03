@@ -157,9 +157,10 @@ unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921,
 int dig_0 = 5, dig_1 = 5, dig_2 = 5, dig_3 = 5, dig_4 = 5,
 dig_5 = 5, dig_6 = 5, dig_7 = 5, dig_8 = 5, dig_9 = 5; // let default offset in DEBUG_OFFSET build be 5
 
-// enums for generating different kind of offset functions (before/after two dots, and between digits)
+int selected_num = 0;
 
-typedef enum debug_offset {  // mode for generating offset functions and displaying 
+// enums for generating different kind of offset functions (before/after two dots, and between digits)
+typedef enum debug_offset {  // mode for generating offset functions and displaying
 	twodots_mode_off = 0,    // symbols on the screen
 	before_twodots,
 	after_twodots
@@ -168,14 +169,18 @@ typedef enum debug_offset {  // mode for generating offset functions and display
 offset_mode offset_debug_on = 0;
 
 void current_func_gen(int current_mode){
-	 ncplane_set_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC);	  \
+	 ncplane_set_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC);
 	 if(offset_debug_on == twodots_mode_off)
 		ncplane_putstr(stdplane,"offset function");
 	 else if(offset_debug_on == before_twodots)
 		ncplane_putstr(stdplane,"before_offset");
 	 else if(offset_debug_on == after_twodots)
 		ncplane_putstr(stdplane,"after_offset");
-	 ncplane_off_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC); \
+	 ncplane_off_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC);
+	 ncplane_printf_yx(stdplane, 0, 70, "selected number: ");
+	 ncplane_set_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC);
+	 ncplane_printf_yx(stdplane, 1, 70, "[%d]", selected_num);
+	 ncplane_off_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC);
 }
 
 	 char dig0[100];
@@ -235,9 +240,8 @@ void current_func_gen(int current_mode){
 	 ncplane_cursor_move_yx(stdplane, 11, 0);		          \
 	 ncplane_putstr(stdplane,"current function generation is:" );	  \
 	 current_func_gen(offset_debug_on); \
-	 } while(0)
+	} while(0)
 #endif
-
 
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -278,22 +282,21 @@ void* current_tick (void* ){
 				current_ms++;
 				current_ms_twodigits = current_ms / 10;
 				tick_counter++;
-			if(current_ms == 999){
-				current_ms = 0;
-				current_ms_twodigits = 0;
-			}
-			if( tick_counter == 1000){
+				if(current_ms == 999){
+					current_ms = 0;
+					current_ms_twodigits = 0;
+				}
+				if( tick_counter == 1000){
 				current_sec++;
 				tick_counter = 0;
+				}
+				if(current_sec == 60){
+					current_ms = 0;
+					current_ms_twodigits = 0;
+					current_sec = 0;
+					current_min++;
+				}
 			}
-			if(current_sec == 60){
-				current_ms = 0;
-				current_ms_twodigits = 0;
-				current_sec = 0;
-				current_min++;
-			}
-			}
-
 			pthread_cond_signal(&cond);  // Signal the condition variable
 			pthread_mutex_unlock(&mutex_tick);
 		}
@@ -346,7 +349,6 @@ int offset_fix_event = 1;
 #if defined(DEBUG_OFFSET) || defined(DEBUG_BEFORE_TWODOTS)
 
 int first_number = 0;
-int prev_key = 0;
 int begin_definition = 1;
 
 
@@ -387,18 +389,18 @@ handle_input(void* arg){
 			if(font_number > 0) font_number--;
 			else font_number = MAX_FONT_NUM;
 		}
-		if(id == '0') prev_key = 0;
-		if(id == '1') prev_key = 1;
-		if(id == '2') prev_key = 2;
-		if(id == '3') prev_key = 3;
-		if(id == '4') prev_key = 4;
-		if(id == '5') prev_key = 5;
-		if(id == '6') prev_key = 6;
-		if(id == '7') prev_key = 7;
-		if(id == '8') prev_key = 8;
-		if(id == '9') prev_key = 9;
+		if(id == '0') selected_num = 0;
+		if(id == '1') selected_num = 1;
+		if(id == '2') selected_num = 2;
+		if(id == '3') selected_num = 3;
+		if(id == '4') selected_num = 4;
+		if(id == '5') selected_num = 5;
+		if(id == '6') selected_num = 6;
+		if(id == '7') selected_num = 7;
+		if(id == '8') selected_num = 8;
+		if(id == '9') selected_num = 9;
 		if(id == '>'){
-		switch(prev_key){
+		switch(selected_num){
 			case 0: dig_0 ++; break;
 			case 1: dig_1 ++; break;
 			case 2: dig_2 ++; break;
@@ -412,7 +414,7 @@ handle_input(void* arg){
 			}
 		}
 		if(id == '<'){
-		switch(prev_key){
+		switch(selected_num){
 			case 0: dig_0 --; break;
 			case 1: dig_1 --; break;
 			case 2: dig_2 --; break;
@@ -424,6 +426,16 @@ handle_input(void* arg){
 			case 8: dig_8 --; break;
 			case 9: dig_9 --; break;
 			}
+		}
+		if(id == NCKEY_RIGHT){
+			dig_0++; dig_1++; dig_2++; dig_3++; dig_4++; dig_5++; dig_6++; dig_7++; dig_8++; dig_9++;
+		}
+		if(id == NCKEY_LEFT){
+			dig_0--; dig_1--; dig_2--; dig_3--; dig_4--; dig_5--; dig_6--; dig_7--; dig_8--; dig_9--;
+		}
+		if(id == '.'){
+			if(selected_num < 9) selected_num++;
+			else selected_num = 0;
 		}
 		if(id == 'h'){
 			if(CUR_MODE != HELP_MODE) CUR_MODE = HELP_MODE;
@@ -673,11 +685,13 @@ void display_help(struct ncplane* plane){
 	ncplane_putstr_yx(plane, 7, 1, "i - increment a number");
 	ncplane_putstr_yx(plane, 8, 1, "r - reset all offsets to 5");
 	ncplane_putstr_yx(plane, 9, 1, "0-9 - choose from 0 to 9 which number's offset to change");
-	ncplane_putstr_yx(plane, 10, 1, "> - increment chosen number's offset");
-	ncplane_putstr_yx(plane, 11, 1, "< - decrement chosen number's offset");
-	ncplane_putstr_yx(plane, 12, 1, "t - toggle between twodots offset and offset between digits");
-	ncplane_putstr_yx(plane, 13, 1, "h - help menu");
-
+	ncplane_putstr_yx(plane, 10, 1, ". - select next number");
+	ncplane_putstr_yx(plane, 11, 1, "> - increment chosen number's offset");
+	ncplane_putstr_yx(plane, 12, 1, "< - decrement chosen number's offset");
+	ncplane_putstr_yx(plane, 13, 1, "➡ - increment all number's offsets");
+	ncplane_putstr_yx(plane, 14, 1, "⬅ - decrement all number's offsets");
+	ncplane_putstr_yx(plane, 15, 1, "t - toggle between twodots offset and offset between digits");
+	ncplane_putstr_yx(plane, 16, 1, "h - help menu");
 };
 #else
 
@@ -702,6 +716,7 @@ void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, i
 
 		if(offset_fix_event == 1 && xstd > 100){ // not the most elegant solution, but kinda works
 			offset_fix_event = 0;                // visually recentering clock plane whenever the font is changed or resize_cb event happens
+			/* assert(font_number <= MAXMAX_FONT_NUM); */
 			fix_offset(plane, fonts[font_number].correct_offset);
 		}
 		x_offset = x_offset;
@@ -791,7 +806,7 @@ int main(){
 		display_cloc(clockplane, 0, 0,
 				     current_min, current_sec, current_ms_twodigits, fonts[font_number]);
 		}
-		else if( CUR_MODE == HELP_MODE)
+		else if(CUR_MODE == HELP_MODE)
 			display_help(clockplane);
 #endif
 
@@ -808,7 +823,7 @@ int main(){
 			OFFSET_BEFORE_TWODOTS(font_number,
 			    dig_0, dig_1, dig_2, dig_3, dig_4, dig_5, dig_6, dig_7, dig_8, dig_9);
 		}
-		else if(offset_debug_on == twodots_mode_off){
+		else if(offset_debug_on == twodots_mode_off && CUR_MODE !=HELP_MODE){
 				OFFSET_DEBUG(first_number,
 							 font_number,
 				dig_0, dig_1, dig_2, dig_3, dig_4, dig_5, dig_6, dig_7, dig_8, dig_9);
@@ -817,7 +832,7 @@ int main(){
 		else if(CUR_MODE == HELP_MODE){
 				display_help(clockplane);
 		}
-		else if(offset_debug_on == after_twodots){
+		else if(offset_debug_on == after_twodots && CUR_MODE !=HELP_MODE){
 			OFFSET_AFTER_TWODOTS(font_number,
 			    dig_0, dig_1, dig_2, dig_3, dig_4, dig_5, dig_6, dig_7, dig_8, dig_9);
 		}
