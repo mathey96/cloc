@@ -125,21 +125,14 @@ int offset_after_twodots_mono9(int num_after_dots){
 int calculate_offset_standard(int digit_1, int digit_2){
 	switch(digit_1){
 		case 0:
-			if(digit_2 >= 0 || digit_2 < 10)
 				return 7;
 		case 1:
-			if((digit_2 >= 2 && digit_2 < 10) || digit_2 == 0)
-				return 4;
-			else if(digit_2 == 1)
 				return 4;
 		case 2:
-			if((digit_2 >= 2 && digit_2 < 10) || digit_2 == 0)
 				return 7;
 	    case 3:
-			 if((digit_2 >= 0 && digit_2 < 4) || (digit_2 >4 && digit_2 < 10))
-				 return 7;
-			 else if(digit_2 == 4)
-				 return 8;
+			 if(digit_2 == 4) return 8;
+			 else return 7;
 	    case 4:
 			return 8;
 	    case 5:
@@ -209,7 +202,9 @@ int calculate_offset_mini(int digit_1, int digit_2){
 			 if(digit_2 >= 0  )
 				 return 3;
 	    case 4:
-			return 3;
+			if(digit_2 == 3)
+				return 5;
+			else return 4;
 	    case 5:
 	    case 6:
 	    case 7:

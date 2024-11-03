@@ -13,7 +13,7 @@
 
 #define NO_OFFSET 0
 
-#ifdef DEBUG_MODE
+#if defined(DEBUG_MODE) || defined(DEBUG_OFFSET)
 typedef struct font {
 	const char* const font_name;
 	const char* const (*pfont)[NUM_OF_SYMBOLS][VEC_MAXSIZE];
