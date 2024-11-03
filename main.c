@@ -4,6 +4,10 @@
 #include "stopwatch.h"
 #include <unistd.h>
 
+struct ncplane* stdplane;
+struct ncplane* clockplane;
+struct notcurses* nc;
+
 static int current_ms = 0;
 static int current_sec = 0;
 static int current_min = 0;
@@ -89,6 +93,38 @@ unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921,
 }while(0) \
 
 
+#define OFFSET_AFTER_TWODOTS(FONTNUM, OFFSET0, OFFSET1, OFFSET2, OFFSET3, OFFSET4, OFFSET5, OFFSET6, OFFSET7, OFFSET8, OFFSET9) do{ \
+		table[TWO_DOTS](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[0](stdplane, 0 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 30 + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[1](stdplane, 30 + (OFFSET1) + x_center, y_center - 10, fonts[(FONTNUM)]);	\
+\
+		table[TWO_DOTS](stdplane, 50 + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[2](stdplane, 50 + (OFFSET2) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 70 + x_center, y_center - 10, fonts[(FONTNUM)]); \
+		table[3] (stdplane, 70 + (OFFSET3) + x_center, y_center - 10, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 0 + x_center, y_center , fonts[(FONTNUM)]); \
+		table[4] (stdplane, 0 + (OFFSET4) + x_center, y_center, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 30 + x_center, y_center , fonts[(FONTNUM)]); \
+		table[5] (stdplane, 30 + (OFFSET5) + x_center, y_center , fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 50 + x_center, y_center, fonts[(FONTNUM)]); \
+		table[6] (stdplane, 50 + (OFFSET6) + x_center, y_center, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, + x_center, y_center + 10, fonts[(FONTNUM)]);	\
+		table[7] (stdplane, 0 + (OFFSET7) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 30 + x_center, y_center + 10, fonts[(FONTNUM)]); \
+		table[8] (stdplane, 30 + (OFFSET8) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+		table[TWO_DOTS](stdplane, 50 + x_center, y_center + 10, fonts[(FONTNUM)]); \
+		table[9] (stdplane, 50 + (OFFSET9) + x_center, y_center + 10, fonts[(FONTNUM)]); \
+\
+}while(0) \
 
 #if defined(DEBUG_MODE) || defined(DEBUG_OFFSET)
 #define SCREENSIZE do{							              \
@@ -120,6 +156,27 @@ unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921,
 #ifdef DEBUG_OFFSET
 int dig_0 = 5, dig_1 = 5, dig_2 = 5, dig_3 = 5, dig_4 = 5,
 dig_5 = 5, dig_6 = 5, dig_7 = 5, dig_8 = 5, dig_9 = 5; // let default offset in DEBUG_OFFSET build be 5
+
+// enums for generating different kind of offset functions (before/after two dots, and between digits)
+
+typedef enum debug_offset {  // mode for generating offset functions and displaying 
+	twodots_mode_off = 0,    // symbols on the screen
+	before_twodots,
+	after_twodots
+} offset_mode;
+
+offset_mode offset_debug_on = 0;
+
+void current_func_gen(int current_mode){
+	 ncplane_set_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC);	  \
+	 if(offset_debug_on == twodots_mode_off)
+		ncplane_putstr(stdplane,"offset function");
+	 else if(offset_debug_on == before_twodots)
+		ncplane_putstr(stdplane,"before_offset");
+	 else if(offset_debug_on == after_twodots)
+		ncplane_putstr(stdplane,"after_offset");
+	 ncplane_off_styles(stdplane, NCSTYLE_BOLD | NCSTYLE_ITALIC); \
+}
 
 	 char dig0[100];
 	 char dig1[100];
@@ -175,6 +232,9 @@ dig_5 = 5, dig_6 = 5, dig_7 = 5, dig_8 = 5, dig_9 = 5; // let default offset in 
 	 ncplane_cursor_move_yx(stdplane, 10, 0);		          \
 	 ncplane_putstr(stdplane,"current font is: ");			  \
 	 ncplane_putstr(stdplane,fonts[font_number].font_name);	  \
+	 ncplane_cursor_move_yx(stdplane, 11, 0);		          \
+	 ncplane_putstr(stdplane,"current function generation is:" );	  \
+	 current_func_gen(offset_debug_on); \
 	 } while(0)
 #endif
 
@@ -198,9 +258,6 @@ int x_center = 0;
 int y_center = 0;
 unsigned xstd,ystd;
 
-struct ncplane* stdplane;
-struct ncplane* clockplane;
-struct notcurses* nc;
 
 long long current_time_millis() {
     struct timeval tv;
@@ -288,9 +345,10 @@ int offset_fix_event = 1;
 
 #if defined(DEBUG_OFFSET) || defined(DEBUG_BEFORE_TWODOTS)
 
-int displayed_num = 0;
+int first_number = 0;
 int prev_key = 0;
-int twodots_debug_on = 0;
+int begin_definition = 1;
+
 
 static void*
 handle_input(void* arg){
@@ -312,13 +370,13 @@ handle_input(void* arg){
 			break;
 		}
 		if(id == 'i'){
-			if (displayed_num < 9) displayed_num ++;
-			else displayed_num = 0;
+			if (first_number < 9) first_number ++;
+			else first_number = 0;
 			continue;
 		}
 		if(id == 'd'){
-			if (displayed_num > 0) displayed_num --;
-			else displayed_num = 9;
+			if (first_number > 0) first_number --;
+			else first_number = 9;
 			continue;
 		}
 		if(id == 'n'){
@@ -372,30 +430,94 @@ handle_input(void* arg){
 			else CUR_MODE = CLOCK_MODE;
 			}
 		if(id == 't'){
-			if (twodots_debug_on == 0) twodots_debug_on = 1;
-			else twodots_debug_on = 0;
+			if (offset_debug_on  < 2){
+				offset_debug_on ++;
+				begin_definition = 1;
+			}
+			else offset_debug_on = 0;
 		}
-	  if(id == 'r'){
-		  dig_0 = 5; dig_1 = 5; dig_2 = 5; dig_3 = 5; dig_4 = 5; dig_5 = 5; dig_6 = 5; dig_7 = 5; dig_8 = 5, dig_9 = 5;
+		if(id == 'r'){ // reset all offset values to 5
+			dig_0 = 5; dig_1 = 5; dig_2 = 5; dig_3 = 5; dig_4 = 5; dig_5 = 5; dig_6 = 5; dig_7 = 5; dig_8 = 5, dig_9 = 5;
 		}
-	  if(id == 's'){
-		  FILE* fp = fopen("./offset_debug_info","a");
-		  fputs("saved values of offsets for font [",fp);
-		  fputs(fonts[font_number].font_name,fp);
-		  fputs("]\n",fp);
-		  fprintf(fp, "with first digit: %d\n", displayed_num);
-		  fprintf(fp,"\
-					   zero is	: %s	\n \
-					   one is	: %s	\n \
-					   two is	: %s	\n \
-					   three is	: %s	\n \
-					   four is	: %s	\n \
-					   five is	: %s	\n \
-					   six is	: %s	\n \
-					   seven is	: %s	\n \
-					   eight is	: %s	\n \
-					   nine is	: %s	\n", dig0, dig1, dig2, dig3, dig4, dig5, dig6, dig7, dig8 , dig9);
-		  fclose(fp);
+		/* if(id == 'b'){ */
+		/* 	begin_definition = 1; */
+			/* if(function_generated == 2) function_generated = 0; */
+			/* else function_generated++; */
+		/* } */
+		if(id == 's'){
+		FILE* fp = fopen("./offset_debug_info","a");
+		if(fp == NULL) perror("file not opened");
+		else{
+		/* if(function_generated == func_offset && begin_definition){ */
+		/* 	fprintf(fp, "int calculate_offset_%s(int digit_1, int digit_2){\n    switch(digit_1){\n", fonts[font_number].font_name); */
+		/* } // not the ideal way of generating func name - font_name and suffix of function declaration should be the same */
+		/* else if(function_generated == func_before_twodots && begin_definition){ */
+		/* 	fprintf(fp, "int offset_before_twodots_%s(int digit_1){\n   switch(digit_1){\n", fonts[font_number].font_name); */
+		/* } */
+		/* else if(function_generated == func_after_twodots && begin_definition){ */
+		/* 	fprintf(fp, "int offset_after_twodots_%s(int digit_1){\n    switch(digit_1){\n", fonts[font_number].font_name); */
+		/* } */
+		if(offset_debug_on == twodots_mode_off && begin_definition){
+			fprintf(fp, "\nint calculate_offset_%s(int digit_1, int digit_2){\n    switch(digit_1){\n", fonts[font_number].font_name);
+		} // not the ideal way of generating func name - font_name and suffix of function declaration should be the same
+		else if(offset_debug_on == before_twodots && begin_definition){
+			fprintf(fp, "\nint offset_before_twodots_%s(int num){\n", fonts[font_number].font_name);
+		}
+		else if(offset_debug_on == after_twodots && begin_definition){
+			fprintf(fp, "\nint offset_after_twodots_%s(int num){\n", fonts[font_number].font_name);
+		}
+		begin_definition = 0;
+		if(offset_debug_on == twodots_mode_off){
+			fprintf(fp, "        case %d:\n"
+								"              switch(digit_2){\n"
+								"                case 0: return %s; "
+								"case 1: return %s; "
+								"case 2: return %s; "
+								"case 3: return %s; "
+								"case 4: return %s; "
+								"case 5: return %s;"
+								"case 6: return %s; "
+								"case 7: return %s; "
+								"case 8: return %s; "
+								"case 9: return %s; "
+								"        }\n", first_number, dig0, dig1, dig2, dig3, dig4, dig5, dig6, dig7, dig8, dig9);
+			if(first_number == 9){
+				fprintf(fp, "    }\n}");
+			}
+		}
+		if(offset_debug_on == before_twodots ){
+			fprintf(fp, "    switch(num){\n"
+						"        case 0: return %s; "
+						"case 1: return %s; "
+						"case 2: return %s; "
+						"case 3: return %s; "
+						"case 4: return %s; "
+						"case 5: return %s;"
+						"case 6: return %s; "
+						"case 7: return %s; "
+						"case 8: return %s; "
+						"case 9: return %s; \n"
+						"    }\n"
+						"}\n", dig0, dig1, dig2, dig3, dig4, dig5, dig6, dig7, dig8, dig9);
+		}
+		if(offset_debug_on == after_twodots ){
+			fprintf(fp, "    switch(num){\n"
+						"        case 0: return %s; "
+								"case 1: return %s; "
+								"case 2: return %s; "
+								"case 3: return %s; "
+								"case 4: return %s; "
+								"case 5: return %s;"
+								"case 6: return %s; "
+								"case 7: return %s; "
+								"case 8: return %s; "
+								"case 9: return %s; \n"
+								"    }\n"
+								"}\n", dig0, dig1, dig2, dig3, dig4, dig5, dig6, dig7, dig8, dig9);
+		}
+
+		fclose(fp);
+		}
 	  }
 
 	}
@@ -682,12 +804,12 @@ int main(){
 #ifdef DEBUG_OFFSET
 		y_center = ystd/3 + 1;
 		x_center = xstd/3 + 1;
-		if(twodots_debug_on && CUR_MODE != HELP_MODE){
+		if(offset_debug_on == before_twodots && CUR_MODE != HELP_MODE){
 			OFFSET_BEFORE_TWODOTS(font_number,
 			    dig_0, dig_1, dig_2, dig_3, dig_4, dig_5, dig_6, dig_7, dig_8, dig_9);
 		}
-		else if(CUR_MODE == CLOCK_MODE && !twodots_debug_on){
-				OFFSET_DEBUG(displayed_num,
+		else if(offset_debug_on == twodots_mode_off){
+				OFFSET_DEBUG(first_number,
 							 font_number,
 				dig_0, dig_1, dig_2, dig_3, dig_4, dig_5, dig_6, dig_7, dig_8, dig_9);
 
@@ -695,6 +817,11 @@ int main(){
 		else if(CUR_MODE == HELP_MODE){
 				display_help(clockplane);
 		}
+		else if(offset_debug_on == after_twodots){
+			OFFSET_AFTER_TWODOTS(font_number,
+			    dig_0, dig_1, dig_2, dig_3, dig_4, dig_5, dig_6, dig_7, dig_8, dig_9);
+		}
+
 		DEBUG_OFFSET_PRINT;
 
 
