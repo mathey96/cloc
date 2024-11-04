@@ -679,19 +679,20 @@ void display_help(struct ncplane* plane){
 
 	ncplane_putstr_yx(plane, 1, 1, "this is the help menu. Press h again to resume to normal application\n");
 	ncplane_putstr_yx(plane, 2, 1, "🕛🕧🕐🕜🕑🕝🕒🕞🕓🕟🕔🕠🕕🕡🕖🕢🕗🕣🕘🕤🕙");
-	ncplane_putstr_yx(plane, 4, 1, "q - quit\n");
-	ncplane_putstr_yx(plane, 5, 1, "n - to change to next font \n");
-	ncplane_putstr_yx(plane, 6, 1, "d - decrement a number");
-	ncplane_putstr_yx(plane, 7, 1, "i - increment a number");
-	ncplane_putstr_yx(plane, 8, 1, "r - reset all offsets to 5");
-	ncplane_putstr_yx(plane, 9, 1, "0-9 - choose from 0 to 9 which number's offset to change");
-	ncplane_putstr_yx(plane, 10, 1, ". - select next number");
-	ncplane_putstr_yx(plane, 11, 1, "> - increment chosen number's offset");
-	ncplane_putstr_yx(plane, 12, 1, "< - decrement chosen number's offset");
-	ncplane_putstr_yx(plane, 13, 1, "➡ - increment all number's offsets");
-	ncplane_putstr_yx(plane, 14, 1, "⬅ - decrement all number's offsets");
-	ncplane_putstr_yx(plane, 15, 1, "t - toggle between twodots offset and offset between digits");
-	ncplane_putstr_yx(plane, 16, 1, "h - help menu");
+	ncplane_putstr_yx(plane, 4, 1, "Use this program to generate correct offset functions for your C sources.");
+	ncplane_putstr_yx(plane, 5, 1, "q - quit\n");
+	ncplane_putstr_yx(plane, 6, 1, "n - to change to next font \n");
+	ncplane_putstr_yx(plane, 7, 1, "d - decrement a number");
+	ncplane_putstr_yx(plane, 8, 1, "i - increment a number");
+	ncplane_putstr_yx(plane, 9, 1, "r - reset all offsets to 5");
+	ncplane_putstr_yx(plane, 10, 1, "0-9 - choose from 0 to 9 which number's offset to change");
+	ncplane_putstr_yx(plane, 11, 1, ". - select next number");
+	ncplane_putstr_yx(plane, 12, 1, "> - increment chosen number's offset");
+	ncplane_putstr_yx(plane, 13, 1, "< - decrement chosen number's offset");
+	ncplane_putstr_yx(plane, 14, 1, "➡ - increment all number's offsets");
+	ncplane_putstr_yx(plane, 15, 1, "⬅ - decrement all number's offsets");
+	ncplane_putstr_yx(plane, 16, 1, "t - toggle between twodots offset and offset between digits");
+	ncplane_putstr_yx(plane, 17, 1, "h - help menu");
 };
 #else
 
