@@ -22,6 +22,19 @@
 #include "fonts/drpepper.h"
 #include "fonts/eftifont.h"
 
+#include "fonts/fourtops.h" //3
+#include "fonts/kban.h" // 7
+#include "fonts/serifcap.h" // 4
+#include "fonts/short.h" // 2
+#include "fonts/slscript.h" //4
+#include "fonts/twopoint.h" //2
+#include "fonts/usaflag.h" //
+#include "fonts/wavy.h" // 3
+#include "fonts/straight.h" //3
+#include "fonts/weird.h" // 5
+#include "fonts/thin.h" //  4
+#include "fonts/gothic.h" //  4
+
 #include "helpers.h"
 
 #define NO_OFFSET 0
@@ -63,6 +76,19 @@ const font font_doom_font           = {"doom"           ,&font_doom            ,
 const font font_drpepper_font       = {"drpepper"       ,&font_drpepper        ,&calculate_offset_drpepper        ,&offset_before_twodots_drpepper       ,&offset_after_twodots_drpepper        ,4  ,10};
 const font font_eftifont_font       = {"eftifont"       ,&font_eftifont        ,&calculate_offset_eftifont        ,&offset_before_twodots_eftifont       ,&offset_after_twodots_eftifont        ,4  ,11};
 
+const font font_fourtops_font       = {"fourtops"       ,&font_fourtops        ,&calculate_offset_fourtops        ,&offset_before_twodots_fourtops      ,&offset_after_twodots_fourtops         ,3  ,NO_OFFSET};
+const font font_kban_font           = {"kban"           ,&font_kban            ,&calculate_offset_kban            ,&offset_before_twodots_kban          ,&offset_after_twodots_kban             ,7  ,NO_OFFSET};
+const font font_serifcap_font       = {"serifcap"       ,&font_serifcap        ,&calculate_offset_serifcap        ,&offset_before_twodots_serifcap      ,&offset_after_twodots_serifcap         ,4  ,NO_OFFSET};
+const font font_short_font          = {"short"          ,&font_short           ,&calculate_offset_short           ,&offset_before_twodots_short         ,&offset_after_twodots_short            ,2  ,NO_OFFSET};
+const font font_slscript_font       = {"slscript"       ,&font_slscript        ,&calculate_offset_slscript        ,&offset_before_twodots_slscript      ,&offset_after_twodots_slscript         ,4  ,NO_OFFSET};
+const font font_twopoint_font       = {"twopoint"       ,&font_twopoint        ,&calculate_offset_twopoint        ,&offset_before_twodots_twopoint      ,&offset_after_twodots_twopoint         ,2  ,NO_OFFSET};
+const font font_usaflag_font        = {"usaflag"        ,&font_usaflag         ,&calculate_offset_usaflag         ,&offset_before_twodots_usaflag       ,&offset_after_twodots_usaflag          ,5  ,NO_OFFSET};
+const font font_wavy_font           = {"wavy"           ,&font_wavy            ,&calculate_offset_wavy            ,&offset_before_twodots_wavy          ,&offset_after_twodots_wavy             ,3  ,NO_OFFSET};
+const font font_straight_font       = {"straight"       ,&font_straight        ,&calculate_offset_straight        ,&offset_before_twodots_straight      ,&offset_after_twodots_straight         ,3  ,NO_OFFSET};
+const font font_weird_font          = {"weird"          ,&font_weird           ,&calculate_offset_weird           ,&offset_before_twodots_weird         ,&offset_after_twodots_weird            ,5  ,NO_OFFSET};
+const font font_thin_font           = {"thin"           ,&font_thin            ,&calculate_offset_thin            ,&offset_before_twodots_thin          ,&offset_after_twodots_thin             ,4  ,NO_OFFSET};
+const font font_gothic_font         = {"gothic"         ,&font_gothic          ,&calculate_offset_gothic          ,&offset_before_twodots_gothic        ,&offset_after_twodots_gothic           ,7  ,NO_OFFSET};
+
 #else
 
 typedef struct font {
@@ -97,14 +123,29 @@ const font font_doom_font           = {&font_doom           ,&calculate_offset_d
 const font font_drpepper_font       = {&font_drpepper       ,&calculate_offset_drpepper        ,&offset_before_twodots_drpepper       ,&offset_after_twodots_drpepper        ,4  ,NO_OFFSET};
 const font font_eftifont_font       = {&font_eftifont       ,&calculate_offset_eftifont        ,&offset_before_twodots_eftifont       ,&offset_after_twodots_eftifont        ,4  ,NO_OFFSET};
 
+const font font_fourtops_font       = {&font_fourtops        ,&calculate_offset_fourtops        ,&offset_before_twodots_fourtops      ,&offset_after_twodots_fourtops         ,3  ,NO_OFFSET};
+const font font_kban_font           = {&font_kban            ,&calculate_offset_kban            ,&offset_before_twodots_kban          ,&offset_after_twodots_kban             ,7  ,NO_OFFSET};
+const font font_serifcap_font       = {&font_serifcap        ,&calculate_offset_serifcap        ,&offset_before_twodots_serifcap      ,&offset_after_twodots_serifcap         ,4  ,NO_OFFSET};
+const font font_short_font          = {&font_short           ,&calculate_offset_short           ,&offset_before_twodots_short         ,&offset_after_twodots_short            ,2  ,NO_OFFSET};
+const font font_slscript_font       = {&font_slscript        ,&calculate_offset_slscript        ,&offset_before_twodots_slscript      ,&offset_after_twodots_slscript         ,4  ,NO_OFFSET};
+const font font_twopoint_font       = {&font_twopoint        ,&calculate_offset_twopoint        ,&offset_before_twodots_twopoint      ,&offset_after_twodots_twopoint         ,2  ,NO_OFFSET};
+const font font_usaflag_font        = {&font_usaflag         ,&calculate_offset_usaflag         ,&offset_before_twodots_usaflag       ,&offset_after_twodots_usaflag          ,5  ,NO_OFFSET};
+const font font_wavy_font           = {&font_wavy            ,&calculate_offset_wavy            ,&offset_before_twodots_wavy          ,&offset_after_twodots_wavy             ,3  ,NO_OFFSET};
+const font font_straight_font       = {&font_straight        ,&calculate_offset_straight        ,&offset_before_twodots_straight      ,&offset_after_twodots_straight         ,3  ,NO_OFFSET};
+const font font_weird_font          = {&font_weird           ,&calculate_offset_weird           ,&offset_before_twodots_weird         ,&offset_after_twodots_weird            ,5  ,NO_OFFSET};
+const font font_thin_font           = {&font_thin            ,&calculate_offset_thin            ,&offset_before_twodots_thin          ,&offset_after_twodots_thin             ,4  ,NO_OFFSET};
+const font font_gothic_font         = {&font_gothic          ,&calculate_offset_gothic          ,&offset_before_twodots_gothic        ,&offset_after_twodots_gothic           ,7  ,NO_OFFSET};
+
+
 #endif
 
 font fonts[] =
 {font_standard_font ,font_mono9_font		,font_mini_font         ,font_lean_font			,font_mono12_font   ,font_smmono12_font	,
  font_smscript_font ,font_smshadow_font		,font_smslant_font      ,font_eftitalic_font	,font_larry3d_font  ,font_graffiti_font	,
- font_madrid_font	,font_5lineoblique_font ,font_acrobatic_font	,font_avatar_font		,font_chunky_font   ,font_cricket_font	,
- font_cursive_font  ,font_doom_font			,font_drpepper_font		,font_eftifont_font};
-
+ font_madrid_font   ,font_5lineoblique_font ,font_acrobatic_font    ,font_avatar_font       ,font_chunky_font   ,font_cricket_font  ,
+ font_cursive_font  ,font_doom_font         ,font_drpepper_font     ,font_eftifont_font     ,font_fourtops_font ,font_kban_font     ,
+ font_serifcap_font ,font_short_font        ,font_slscript_font     ,font_twopoint_font     ,font_usaflag_font  ,font_wavy_font     ,
+ font_straight_font ,font_weird_font        ,font_thin_font         ,font_gothic_font};
 
 
 

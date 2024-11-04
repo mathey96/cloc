@@ -2,6 +2,8 @@
 set -xe
 
 #gresi na madrid.flf
+# and on fourtops
+# and usaflag
 export LISTOFFILES=$(find ./downloaded_fonts/ -type f)
 export NAMESOFFONTS=$(echo "$LISTOFFILES" | sed 's/^.*\///' | cut -d "." -f 1)
 

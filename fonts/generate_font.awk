@@ -27,9 +27,9 @@ function num_to_string(arguments) {
 }
 
 BEGIN {
-    line_number = 0
+    line_number = 1
 	{print ""} {print}
-	max_vector_size = 1;
+	max_vector_size = 0;
 	current_number = -1
 	flag = 0
 }
@@ -55,7 +55,7 @@ BEGIN {
 		if(current_number < 10){
 		flag_still_parsing_digit = 0
 		print ""
-        line_number = 0
+        line_number = 1
 		}
 		else if (current_number >= 10 && line_number <= max_vector_size){
 			printf "const char* const %s_%s_%d = \"%s\\n \";\n",var1, num_to_string(current_number), line_number, $0, max_vector_size
