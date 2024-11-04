@@ -13,7 +13,7 @@ last_digit(int num){
 	return digit;
 }
 
-#define DIG2EQ(DIG) digit_2 == (DIG)
+#define DIG2EQ(DIG) digit_2 == (DIG) // with the introduction of generation of offset functions, this macro and is_in_set should be obsolete
 
 // check if digit num is equal to any of the given variadic args
 int is_in_set(int num, int count, ...) {
@@ -671,4 +671,617 @@ int offset_after_twodots_smslant(int num_after_dots){
 		fprintf(stderr, " wrong digit");
 		return -1;
 	}
+}
+
+int calculate_offset_eftitalic(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 7; case 1: return 6; case 2: return 7; case 3: return 7; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 5; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+    }
+}
+
+int offset_before_twodots_eftitalic(int num){
+    switch(num){
+        case 0: return 5; case 1: return 5; case 2: return 6; case 3: return 7; case 4: return 7; case 5: return 5;case 6: return 4; case 7: return 4; case 8: return 5; case 9: return 5;
+    }
+}
+
+int offset_after_twodots_eftitalic(int num){
+    switch(num){
+        case 0: return 3; case 1: return 3; case 2: return 3; case 3: return 3; case 4: return 3; case 5: return 3;case 6: return 3; case 7: return 3; case 8: return 3; case 9: return 3;
+    }
+}
+
+int calculate_offset_larry3d(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 11; case 1: return 11; case 2: return 11; case 3: return 11; case 4: return 11; case 5: return 11;case 6: return 11; case 7: return 11; case 8: return 11; case 9: return 11;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 12; case 1: return 12; case 2: return 12; case 3: return 12; case 4: return 12; case 5: return 12;case 6: return 12; case 7: return 12; case 8: return 12; case 9: return 12;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 11; case 1: return 11; case 2: return 11; case 3: return 11; case 4: return 11; case 5: return 11;case 6: return 11; case 7: return 11; case 8: return 11; case 9: return 11;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10 ; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 11; case 1: return 11; case 2: return 11; case 3: return 11; case 4: return 11; case 5: return 11;case 6: return 11; case 7: return 11; case 8: return 11; case 9: return 11;         }
+    }
+}
+
+int offset_before_twodots_larry3d(int num){
+    switch(num){
+        case 0: return 10; case 1: return 8; case 2: return 11; case 3: return 10; case 4: return 12; case 5: return 11;case 6: return 10; case 7: return 11; case 8: return 10; case 9: return 10;
+    }
+}
+
+int offset_after_twodots_larry3d(int num){
+    switch(num){
+        case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;
+    }
+}
+
+int calculate_offset_graffiti(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+	    default: return 10;
+    }
+
+}
+
+int offset_before_twodots_graffiti(int num){
+    switch(num){
+        case 0: return 10; case 1: return 6; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;
+    }
+}
+
+int offset_after_twodots_graffiti(int num){
+    switch(num){
+        case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 5; case 7: return 4; case 8: return 4; case 9: return 4;
+    }
+}
+
+int calculate_offset_madrid(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 3; case 1: return 3; case 2: return 3; case 3: return 3; case 4: return 3; case 5: return 3;case 6: return 3; case 7: return 3; case 8: return 3; case 9: return 3;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 3; case 1: return 4; case 2: return 3; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 5; case 8: return 4; case 9: return 4;         }
+    }
+}
+
+int offset_before_twodots_madrid(int num){
+    switch(num){
+        case 0: return 4; case 1: return 3; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;
+    }
+}
+
+int offset_after_twodots_madrid(int num){
+    switch(num){
+        case 0: return 3; case 1: return 2; case 2: return 3; case 3: return 3; case 4: return 3; case 5: return 3;case 6: return 3; case 7: return 3; case 8: return 3; case 9: return 3;
+    }
+}
+
+
+int calculate_offset_5lineoblique(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 11; case 1: return 11; case 2: return 11; case 3: return 11; case 4: return 11; case 5: return 11;case 6: return 11; case 7: return 11; case 8: return 11; case 9: return 11;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 6; case 1: return 7; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 9; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;         }
+    }
+}
+
+int offset_before_twodots_5lineoblique(int num){
+    switch(num){
+        case 0: return 11; case 1: return 6; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 11;case 6: return 10; case 7: return 9; case 8: return 10; case 9: return 11;
+    }
+}
+
+int offset_after_twodots_5lineoblique(int num){
+    switch(num){
+        case 0: return 5; case 1: return 4; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 4; case 8: return 4; case 9: return 5;
+    }
+}
+
+int calculate_offset_acrobatic(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 17; case 1: return 18; case 2: return 18; case 3: return 18; case 4: return 18; case 5: return 18;case 6: return 18; case 7: return 18; case 8: return 18; case 9: return 18;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 5; case 1: return 7; case 2: return 8; case 3: return 7; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 11; case 1: return 12; case 2: return 11; case 3: return 11; case 4: return 11; case 5: return 11;case 6: return 11; case 7: return 11; case 8: return 11; case 9: return 11;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 13; case 1: return 13; case 2: return 13; case 3: return 13; case 4: return 13; case 5: return 13;case 6: return 13; case 7: return 13; case 8: return 13; case 9: return 13;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 10; case 1: return 12; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 13; case 1: return 14; case 2: return 13; case 3: return 13; case 4: return 13; case 5: return 13;case 6: return 13; case 7: return 13; case 8: return 13; case 9: return 13;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 14; case 1: return 15; case 2: return 14; case 3: return 14; case 4: return 14; case 5: return 14;case 6: return 14; case 7: return 14; case 8: return 14; case 9: return 14;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 12; case 1: return 13; case 2: return 12; case 3: return 12; case 4: return 12; case 5: return 12;case 6: return 12; case 7: return 12; case 8: return 12; case 9: return 12;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 13; case 1: return 14; case 2: return 13; case 3: return 13; case 4: return 13; case 5: return 13;case 6: return 13; case 7: return 13; case 8: return 13; case 9: return 13;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 13; case 1: return 14; case 2: return 13; case 3: return 13; case 4: return 13; case 5: return 13;case 6: return 13; case 7: return 13; case 8: return 13; case 9: return 13;         }
+    }
+}
+
+int offset_before_twodots_acrobatic(int num){
+    switch(num){
+        case 0: return 19; case 1: return 9; case 2: return 13; case 3: return 16; case 4: return 14; case 5: return 15;case 6: return 16; case 7: return 16; case 8: return 16; case 9: return 16;
+    }
+}
+
+int offset_after_twodots_acrobatic(int num){
+    switch(num){
+        case 0: return 6; case 1: return 8; case 2: return 7; case 3: return 7; case 4: return 6; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;
+    }
+}
+
+int calculate_offset_avatar(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 3; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 6; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;         }
+    }
+}
+
+int offset_before_twodots_avatar(int num){
+    switch(num){
+        case 0: return 8; case 1: return 5; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;
+    }
+}
+
+int offset_after_twodots_avatar(int num){
+    switch(num){
+        case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;
+    }
+}
+
+int calculate_offset_chunky(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+    }
+}
+
+int offset_before_twodots_chunky(int num){
+    switch(num){
+        case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;
+    }
+}
+
+int offset_after_twodots_chunky(int num){
+    switch(num){
+        case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;
+    }
+}
+
+int calculate_offset_cricket(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 9; case 1: return 9; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 10; case 1: return 10; case 2: return 10; case 3: return 10; case 4: return 10; case 5: return 10;case 6: return 10; case 7: return 10; case 8: return 10; case 9: return 10;         }
+    }
+}
+
+int offset_before_twodots_cricket(int num){
+    switch(num){
+        case 0: return 11; case 1: return 10; case 2: return 10; case 3: return 11; case 4: return 11; case 5: return 11;case 6: return 11; case 7: return 11; case 8: return 11; case 9: return 11;
+    }
+}
+
+int offset_after_twodots_cricket(int num){
+    switch(num){
+        case 0: return 7; case 1: return 7; case 2: return 7; case 3: return 7; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7;
+    }
+}
+
+int calculate_offset_cursive(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 3; case 1: return 3; case 2: return 3; case 3: return 3; case 4: return 3; case 5: return 3;case 6: return 3; case 7: return 4; case 8: return 3; case 9: return 3;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 7; case 8: return 6; case 9: return 6;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 5; case 1: return 6; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 6; case 8: return 5; case 9: return 5;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 5; case 1: return 6; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 6; case 8: return 5; case 9: return 5;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 3; case 1: return 4; case 2: return 3; case 3: return 3; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 5; case 8: return 4; case 9: return 4;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 6; case 8: return 5; case 9: return 5;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 4; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 5; case 8: return 4; case 9: return 4;         }
+    }
+}
+
+int offset_before_twodots_cursive(int num){
+    switch(num){
+        case 0: return 7; case 1: return 5; case 2: return 7; case 3: return 7; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 5; case 8: return 7; case 9: return 7;
+    }
+}
+
+int offset_after_twodots_cursive(int num){
+    switch(num){
+        case 0: return 4; case 1: return 6; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;
+    }
+}
+
+int calculate_offset_doom(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 8; case 1: return 8; case 2: return 8; case 3: return 8; case 4: return 8; case 5: return 8;case 6: return 8; case 7: return 8; case 8: return 8; case 9: return 8;         }
+    }
+}
+
+int offset_before_twodots_doom(int num){
+    switch(num){
+        case 0: return 9; case 1: return 7; case 2: return 9; case 3: return 9; case 4: return 9; case 5: return 9;case 6: return 9; case 7: return 9; case 8: return 9; case 9: return 9;
+    }
+}
+
+int offset_after_twodots_doom(int num){
+    switch(num){
+        case 0: return 5; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 5; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;
+    }
+}
+
+int calculate_offset_drpepper(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 3; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 3;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 6; case 1: return 6; case 2: return 6; case 3: return 6; case 4: return 6; case 5: return 6;case 6: return 6; case 7: return 6; case 8: return 6; case 9: return 6;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+    }
+}
+int offset_before_twodots_drpepper(int num){
+    switch(num){
+        case 0: return 7; case 1: return 5; case 2: return 7; case 3: return 7; case 4: return 7; case 5: return 7;case 6: return 7; case 7: return 7; case 8: return 7; case 9: return 7; default: return 5;
+    }
+}
+
+int offset_after_twodots_drpepper(int num){
+    switch(num){
+		case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 4; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5; default: return 5;
+    }
+}
+
+
+int calculate_offset_eftifont(int digit_1, int digit_2){
+    switch(digit_1){
+        case 0:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 1:
+              switch(digit_2){
+                case 0: return 3; case 1: return 4; case 2: return 4; case 3: return 4; case 4: return 4; case 5: return 4;case 6: return 4; case 7: return 3; case 8: return 4; case 9: return 4;         }
+        case 2:
+              switch(digit_2){
+                case 0: return 4; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 3:
+              switch(digit_2){
+                case 0: return 4; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 4;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;         }
+        case 4:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 5:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 4; case 8: return 5; case 9: return 4;         }
+        case 6:
+              switch(digit_2){
+                case 0: return 5; case 1: return 4; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 4; case 8: return 5; case 9: return 4;         }
+        case 7:
+              switch(digit_2){
+                case 0: return 5; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 5; case 8: return 5; case 9: return 5;         }
+        case 8:
+              switch(digit_2){
+                case 0: return 4; case 1: return 5; case 2: return 4; case 3: return 5; case 4: return 5; case 5: return 5;case 6: return 5; case 7: return 4; case 8: return 5; case 9: return 5;         }
+        case 9:
+              switch(digit_2){
+                case 0: return 4; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 4; case 5: return 5;case 6: return 5; case 7: return 4; case 8: return 4; case 9: return 5;         }
+    }
+}
+int offset_before_twodots_eftifont(int num){
+    switch(num){
+        case 0: return 6; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 6; case 5: return 5;case 6: return 5; case 7: return 6; case 8: return 6; case 9: return 6;
+    }
+}
+
+int offset_after_twodots_eftifont(int num){
+    switch(num){
+        case 0: return 4; case 1: return 5; case 2: return 5; case 3: return 5; case 4: return 4; case 5: return 5;case 6: return 4; case 7: return 4; case 8: return 4; case 9: return 4;
+    }
 }

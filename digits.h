@@ -8,6 +8,19 @@
 #include "fonts/smscript.h"
 #include "fonts/smshadow.h"
 #include "fonts/smslant.h"
+#include "fonts/eftitalic.h"
+#include "fonts/larry3d.h"
+#include "fonts/graffiti.h"
+#include "fonts/madrid.h"
+#include "fonts/5lineoblique.h"
+#include "fonts/acrobatic.h"
+#include "fonts/avatar.h"
+#include "fonts/chunky.h"
+#include "fonts/cricket.h"
+#include "fonts/cursive.h"
+#include "fonts/doom.h"
+#include "fonts/drpepper.h"
+#include "fonts/eftifont.h"
 
 #include "helpers.h"
 
@@ -27,15 +40,29 @@ typedef struct font {
 // compile fonts without font_name field, let this field be only in the debug build
 // make sure, while testing new fonts, to keep values of correct_offset of both DEBUG_MODE build and release build the same.
 
-const font font_standard_font = {"standard font", &font_standard, &calculate_offset_standard, &offset_before_twodots_standard, &offset_after_twodots_standard, 7, NO_OFFSET};
-const font font_mono9_font    = {"mono9 font", &font_mono9, &calculate_offset_mono9, &offset_before_twodots_mono9, &offset_after_twodots_mono9, 6, NO_OFFSET};
-const font font_mini_font     = {"mini font", &font_mini, &calculate_offset_mini, &offset_before_twodots_mini, &offset_after_twodots_mini, 4, 15};
-const font font_lean_font     = {"lean font", &font_lean, &calculate_offset_lean, &offset_before_twodots_lean, &offset_after_twodots_lean, 6, NO_OFFSET};
-const font font_mono12_font   = {"mono12 font", &font_mono12, &calculate_offset_mono12, &offset_before_twodots_mono12, &offset_after_twodots_mono12, 8, -10};
-const font font_smmono12_font = {"smmono12 font", &font_smmono12, &calculate_offset_smmono12, &offset_before_twodots_smmono12, &offset_after_twodots_smmono12, 8, NO_OFFSET};
-const font font_smscript_font = {"smscript font", &font_smscript, &calculate_offset_smscript, &offset_before_twodots_smscript, &offset_after_twodots_smscript, 5, 5};
-const font font_smshadow_font = {"smshadow font", &font_smshadow, &calculate_offset_smshadow, &offset_before_twodots_smshadow, &offset_after_twodots_smshadow, 4, 5};
-const font font_smslant_font  = {"smslant font", &font_smslant, &calculate_offset_smslant, &offset_before_twodots_smslant, &offset_after_twodots_smslant, 5, NO_OFFSET};
+const font font_standard_font       = {"standard"       ,&font_standard        ,&calculate_offset_standard        ,&offset_before_twodots_standard       ,&offset_after_twodots_standard        ,7  ,NO_OFFSET};
+const font font_mono9_font          = {"mono9"          ,&font_mono9           ,&calculate_offset_mono9           ,&offset_before_twodots_mono9          ,&offset_after_twodots_mono9           ,6  ,NO_OFFSET};
+const font font_mini_font           = {"mini"           ,&font_mini            ,&calculate_offset_mini            ,&offset_before_twodots_mini           ,&offset_after_twodots_mini            ,4  ,15};
+const font font_lean_font           = {"lean"           ,&font_lean            ,&calculate_offset_lean            ,&offset_before_twodots_lean           ,&offset_after_twodots_lean            ,6  ,NO_OFFSET};
+const font font_mono12_font         = {"mono12"         ,&font_mono12          ,&calculate_offset_mono12          ,&offset_before_twodots_mono12         ,&offset_after_twodots_mono12          ,8  ,-10};
+const font font_smmono12_font       = {"smmono12"       ,&font_smmono12        ,&calculate_offset_smmono12        ,&offset_before_twodots_smmono12       ,&offset_after_twodots_smmono12        ,8  ,NO_OFFSET};
+const font font_smscript_font       = {"smscript"       ,&font_smscript        ,&calculate_offset_smscript        ,&offset_before_twodots_smscript       ,&offset_after_twodots_smscript        ,5  ,5};
+const font font_smshadow_font       = {"smshadow"       ,&font_smshadow        ,&calculate_offset_smshadow        ,&offset_before_twodots_smshadow       ,&offset_after_twodots_smshadow        ,4  ,5};
+const font font_smslant_font        = {"smslant"        ,&font_smslant         ,&calculate_offset_smslant         ,&offset_before_twodots_smslant        ,&offset_after_twodots_smslant         ,5  ,NO_OFFSET};
+const font font_eftitalic_font      = {"eftitalic"      ,&font_eftitalic       ,&calculate_offset_eftitalic       ,&offset_before_twodots_eftitalic      ,&offset_after_twodots_eftitalic       ,5  ,13};
+const font font_larry3d_font        = {"larry3d"        ,&font_larry3d         ,&calculate_offset_larry3d         ,&offset_before_twodots_larry3d        ,&offset_after_twodots_larry3d         ,8  ,-3};
+const font font_graffiti_font       = {"graffiti"       ,&font_graffiti        ,&calculate_offset_graffiti        ,&offset_before_twodots_graffiti       ,&offset_after_twodots_graffiti        ,7  ,NO_OFFSET};
+const font font_madrid_font         = {"madrid"         ,&font_madrid          ,&calculate_offset_madrid          ,&offset_before_twodots_madrid         ,&offset_after_twodots_madrid          ,4  ,15};
+const font font_5lineoblique_font   = {"5lineoblique"   ,&font_5lineoblique    ,&calculate_offset_5lineoblique    ,&offset_before_twodots_5lineoblique   ,&offset_after_twodots_5lineoblique    ,6  ,NO_OFFSET};
+const font font_acrobatic_font      = {"acrobatic"      ,&font_acrobatic       ,&calculate_offset_acrobatic       ,&offset_before_twodots_acrobatic      ,&offset_after_twodots_acrobatic       ,11 ,-20};
+const font font_avatar_font         = {"avatar"         ,&font_avatar          ,&calculate_offset_avatar          ,&offset_before_twodots_avatar         ,&offset_after_twodots_avatar          ,5  ,8};
+const font font_chunky_font         = {"chunky"         ,&font_chunky          ,&calculate_offset_chunky          ,&offset_before_twodots_chunky         ,&offset_after_twodots_chunky          ,4  ,NO_OFFSET};
+const font font_cricket_font        = {"cricket"        ,&font_cricket         ,&calculate_offset_cricket         ,&offset_before_twodots_cricket        ,&offset_after_twodots_cricket         ,7  , -10};
+const font font_cursive_font        = {"cursive"        ,&font_cursive         ,&calculate_offset_cursive         ,&offset_before_twodots_cursive        ,&offset_after_twodots_cursive         ,4  ,10};
+const font font_doom_font           = {"doom"           ,&font_doom            ,&calculate_offset_doom            ,&offset_before_twodots_doom           ,&offset_after_twodots_doom            ,6  ,NO_OFFSET};
+const font font_drpepper_font       = {"drpepper"       ,&font_drpepper        ,&calculate_offset_drpepper        ,&offset_before_twodots_drpepper       ,&offset_after_twodots_drpepper        ,4  ,10};
+const font font_eftifont_font       = {"eftifont"       ,&font_eftifont        ,&calculate_offset_eftifont        ,&offset_before_twodots_eftifont       ,&offset_after_twodots_eftifont        ,4  ,11};
+
 #else
 
 typedef struct font {
@@ -47,100 +74,110 @@ typedef struct font {
 	int correct_offset;
 } font;
 
-const font font_standard_font = {&font_standard, &calculate_offset_standard, &offset_before_twodots_standard, &offset_after_twodots_standard, 7, NO_OFFSET};
-const font font_mono9_font    = {&font_mono9, &calculate_offset_mono9, &offset_before_twodots_mono9, &offset_after_twodots_mono9, 6, NO_OFFSET};
-const font font_mini_font     = {&font_mini, &calculate_offset_mini, &offset_before_twodots_mini, &offset_after_twodots_mini, 4, 15};
-const font font_lean_font     = {&font_lean, &calculate_offset_lean, &offset_before_twodots_lean, &offset_after_twodots_lean, 6, NO_OFFSET};
-const font font_mono12_font   = {&font_mono12, &calculate_offset_mono12, &offset_before_twodots_mono12, &offset_after_twodots_mono12, 8, -10};
-const font font_smmono12_font = {&font_smmono12, &calculate_offset_smmono12, &offset_before_twodots_smmono12, &offset_after_twodots_smmono12, 8, NO_OFFSET};
-const font font_smscript_font = {&font_smscript, &calculate_offset_smscript, &offset_before_twodots_smscript, &offset_after_twodots_smscript, 5, 5};
-const font font_smshadow_font = {&font_smshadow, &calculate_offset_smshadow, &offset_before_twodots_smshadow, &offset_after_twodots_smshadow, 4, 5};
-const font font_smslant_font  = {&font_smslant, &calculate_offset_smslant, &offset_before_twodots_smslant, &offset_after_twodots_smslant, 5, NO_OFFSET};
+const font font_standard_font       = {&font_standard       ,&calculate_offset_standard        ,&offset_before_twodots_standard       ,&offset_after_twodots_standard        ,7  ,NO_OFFSET};
+const font font_mono9_font          = {&font_mono9          ,&calculate_offset_mono9           ,&offset_before_twodots_mono9          ,&offset_after_twodots_mono9           ,6  ,NO_OFFSET};
+const font font_mini_font           = {&font_mini           ,&calculate_offset_mini            ,&offset_before_twodots_mini           ,&offset_after_twodots_mini            ,4  ,15};
+const font font_lean_font           = {&font_lean           ,&calculate_offset_lean            ,&offset_before_twodots_lean           ,&offset_after_twodots_lean            ,6  ,NO_OFFSET};
+const font font_mono12_font         = {&font_mono12         ,&calculate_offset_mono12          ,&offset_before_twodots_mono12         ,&offset_after_twodots_mono12          ,8  ,-10};
+const font font_smmono12_font       = {&font_smmono12       ,&calculate_offset_smmono12        ,&offset_before_twodots_smmono12       ,&offset_after_twodots_smmono12        ,8  ,NO_OFFSET};
+const font font_smscript_font       = {&font_smscript       ,&calculate_offset_smscript        ,&offset_before_twodots_smscript       ,&offset_after_twodots_smscript        ,5  ,5};
+const font font_smshadow_font       = {&font_smshadow       ,&calculate_offset_smshadow        ,&offset_before_twodots_smshadow       ,&offset_after_twodots_smshadow        ,4  ,5};
+const font font_smslant_font        = {&font_smslant        ,&calculate_offset_smslant         ,&offset_before_twodots_smslant        ,&offset_after_twodots_smslant         ,5  ,NO_OFFSET};
+const font font_eftitalic_font      = {&font_eftitalic      ,&calculate_offset_eftitalic       ,&offset_before_twodots_eftitalic      ,&offset_after_twodots_eftitalic       ,5  ,NO_OFFSET};
+const font font_larry3d_font        = {&font_larry3d        ,&calculate_offset_larry3d         ,&offset_before_twodots_larry3d        ,&offset_after_twodots_larry3d         ,8  ,NO_OFFSET};
+const font font_graffiti_font       = {&font_graffiti       ,&calculate_offset_graffiti        ,&offset_before_twodots_graffiti       ,&offset_after_twodots_graffiti        ,7  ,NO_OFFSET};
+const font font_madrid_font         = {&font_madrid         ,&calculate_offset_madrid          ,&offset_before_twodots_madrid         ,&offset_after_twodots_madrid          ,4  ,NO_OFFSET};
+const font font_5lineoblique_font   = {&font_5lineoblique   ,&calculate_offset_5lineoblique    ,&offset_before_twodots_5lineoblique   ,&offset_after_twodots_5lineoblique    ,6  ,NO_OFFSET};
+const font font_acrobatic_font      = {&font_acrobatic      ,&calculate_offset_acrobatic       ,&offset_before_twodots_acrobatic      ,&offset_after_twodots_acrobatic       ,10 ,NO_OFFSET};
+const font font_avatar_font         = {&font_avatar         ,&calculate_offset_avatar          ,&offset_before_twodots_avatar         ,&offset_after_twodots_avatar          ,5  ,NO_OFFSET};
+const font font_chunky_font         = {&font_chunky         ,&calculate_offset_chunky          ,&offset_before_twodots_chunky         ,&offset_after_twodots_chunky          ,4  ,NO_OFFSET};
+const font font_cricket_font        = {&font_cricket        ,&calculate_offset_cricket         ,&offset_before_twodots_cricket        ,&offset_after_twodots_cricket         ,7  ,NO_OFFSET};
+const font font_cursive_font        = {&font_cursive        ,&calculate_offset_cursive         ,&offset_before_twodots_cursive        ,&offset_after_twodots_cursive         ,4  ,NO_OFFSET};
+const font font_doom_font           = {&font_doom           ,&calculate_offset_doom            ,&offset_before_twodots_doom           ,&offset_after_twodots_doom            ,6  ,NO_OFFSET};
+const font font_drpepper_font       = {&font_drpepper       ,&calculate_offset_drpepper        ,&offset_before_twodots_drpepper       ,&offset_after_twodots_drpepper        ,4  ,NO_OFFSET};
+const font font_eftifont_font       = {&font_eftifont       ,&calculate_offset_eftifont        ,&offset_before_twodots_eftifont       ,&offset_after_twodots_eftifont        ,4  ,NO_OFFSET};
+
 #endif
 
-font fonts[9] =
-{font_standard_font, font_mono9_font, font_mini_font, font_lean_font, font_mono12_font, font_smmono12_font, font_smscript_font, font_smshadow_font, font_smslant_font};
+font fonts[] =
+{font_standard_font ,font_mono9_font		,font_mini_font         ,font_lean_font			,font_mono12_font   ,font_smmono12_font	,
+ font_smscript_font ,font_smshadow_font		,font_smslant_font      ,font_eftitalic_font	,font_larry3d_font  ,font_graffiti_font	,
+ font_madrid_font	,font_5lineoblique_font ,font_acrobatic_font	,font_avatar_font		,font_chunky_font   ,font_cricket_font	,
+ font_cursive_font  ,font_doom_font			,font_drpepper_font		,font_eftifont_font};
+
+
+
+
 
 
 void print_0(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[0][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[0][i]);
 	}
 }
 
 void print_1(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[1][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[1][i]);
 	}
 }
 
 void print_2(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[2][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[2][i]);
 	}
 }
 void print_3(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[3][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[3][i]);
 	}
 }
 void print_4(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[4][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[4][i]);
 	}
 }
 void print_5(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[5][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[5][i]);
 	}
 }
 void print_6(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[6][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[6][i]);
 	}
 }
 void print_7(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[7][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[7][i]);
 	}
 }
 
 void print_8(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[8][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[8][i]);
 	}
 }
 
 void print_9(struct ncplane* plane, int offset, int y_offset, font current_font){
 
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[9][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[9][i]);
 	}
 }
 
 void two_dot(struct ncplane* plane, int offset, int y_offset, font current_font){
 	for (int i = 0; i < current_font.size; i++ ){
-    ncplane_putstr(plane, (*current_font.pfont)[10][i]);
-	ncplane_cursor_move_yx(plane, 1 + i + y_offset, offset);
+    ncplane_putstr_yx(plane,1+i+y_offset, offset, (*current_font.pfont)[10][i]);
 	}
 }
 
