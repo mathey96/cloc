@@ -460,15 +460,6 @@ handle_input(void* arg){
 		FILE* fp = fopen("./offset_debug_info","a");
 		if(fp == NULL) perror("file not opened");
 		else{
-		/* if(function_generated == func_offset && begin_definition){ */
-		/* 	fprintf(fp, "int calculate_offset_%s(int digit_1, int digit_2){\n    switch(digit_1){\n", fonts[font_number].font_name); */
-		/* } // not the ideal way of generating func name - font_name and suffix of function declaration should be the same */
-		/* else if(function_generated == func_before_twodots && begin_definition){ */
-		/* 	fprintf(fp, "int offset_before_twodots_%s(int digit_1){\n   switch(digit_1){\n", fonts[font_number].font_name); */
-		/* } */
-		/* else if(function_generated == func_after_twodots && begin_definition){ */
-		/* 	fprintf(fp, "int offset_after_twodots_%s(int digit_1){\n    switch(digit_1){\n", fonts[font_number].font_name); */
-		/* } */
 		if(offset_debug_on == twodots_mode_off && begin_definition){
 			fprintf(fp, "\nint calculate_offset_%s(int digit_1, int digit_2){\n    switch(digit_1){\n", fonts[font_number].font_name);
 		} // not the ideal way of generating func name - font_name and suffix of function declaration should be the same
@@ -550,11 +541,22 @@ handle_input(void* arg){
 			continue;
 		}
 		if(id == 'q'){
-            pthread_mutex_lock(&mutex);
+			/* tick_thread_done = true; */
+			if(animation_thread_on == true){ // kill all threads
+				animation_thread_on = false;
+				if(pthread_join(animation, NULL) != 0){
+						notcurses_stop(nc);
+						exit(-1);
+					}
+			}
+
+			if(tick_thread_done = false){
+				tick_thread_done = true;
+				if(pthread_join(thread_id_tick, NULL) != 0){
+					exit(-1);
+				}
+			}
 			thread_done = true;
-			tick_thread_done = true;
-            pthread_cond_signal(&cond);  // Signal the condition variable
-            pthread_mutex_unlock(&mutex);
 			pthread_exit(NULL);
 			break;
 		}
