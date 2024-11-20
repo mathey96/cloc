@@ -12,12 +12,26 @@ static int current_ms = 0;
 static int current_sec = 0;
 static int current_min = 0;
 
+typedef enum MODE {
+	CLOCK_MODE = 0,
+	STOPWATCH_MODE,
+	HELP_MODE
+} MODE;
+
 size_t color_index = 0;
 unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921, 0x458688, 0xb16286, 0x89d6a,
 					 0xe0b0b0, 0xa0ffff, 0xe0a0a0, 0x0a0a0a, 0x11ffff, 0x80d0ff, 0xbde8f6, 0x40d0d0, 0x40d040,
 					 0xd4af37, 0xf0f0a0, 0xd78700, 0x40f040, 0xcccbbb, 0xbbbbbb, 0x014dd3, 0x00dddd, 0x00bcaa,
 					 0xff5349, 0xf2f2f2, 0xffd700, 0x44488f, 0x884448, 0x222222, 0xff00ff, 0x00ff00, 0x808080,
 					 0x444444, 0x888888, 0x4f4f4f, 0xf4f4f4, 0xfcfcfc, 0x00ffb0, 0x00b0b0, 0xe0f0ff, 0xff6a00};
+
+MODE PREV_MODE = CLOCK_MODE;
+MODE CUR_MODE = CLOCK_MODE;
+
+bool thread_done = false;
+static unsigned font_number = 0;
+
+int offset_fix_event = 1;
 
 #define TWO_DOTS 10
 
@@ -92,7 +106,6 @@ unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921,
 \
 }while(0) \
 
-
 #define OFFSET_AFTER_TWODOTS(FONTNUM, OFFSET0, OFFSET1, OFFSET2, OFFSET3, OFFSET4, OFFSET5, OFFSET6, OFFSET7, OFFSET8, OFFSET9) do{ \
 		table[TWO_DOTS](stdplane, 0 + x_center, y_center - 10, fonts[(FONTNUM)]); \
 		table[0](stdplane, 0 + (OFFSET0) + x_center, y_center - 10, fonts[(FONTNUM)]); \
@@ -126,6 +139,10 @@ unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921,
 \
 }while(0) \
 
+#ifdef DEBUG_MODE
+int font_width = 0;
+#endif
+
 #if defined(DEBUG_MODE) || defined(DEBUG_OFFSET)
 #define SCREENSIZE do{							              \
 	 char xchar[100] ;							              \
@@ -150,6 +167,7 @@ unsigned colors[] = {0x000000, 0xffffff, 0x282828, 0xcc241d, 0x98971a, 0xd79921,
 	 ncplane_cursor_move_yx(stdplane, 3, 0);				  \
 	 ncplane_putstr(stdplane,"current color index is: ");	  \
 	 ncplane_putstr(stdplane,colorindex);			          \
+	 ncplane_printf_yx(stdplane, 4, 0,"right font limit is: %d", font_width);\
 	 }while(0)
 #endif
 
@@ -287,8 +305,8 @@ void* current_tick (void* ){
 					current_ms_twodigits = 0;
 				}
 				if( tick_counter == 1000){
-				current_sec++;
-				tick_counter = 0;
+					current_sec++;
+					tick_counter = 0;
 				}
 				if(current_sec == 60){
 					current_ms = 0;
@@ -309,6 +327,17 @@ void* current_tick (void* ){
 
 bool animation_thread_on = false;
 
+void recenter(){
+	if(xstd > fonts[font_number].font_width){ // when screen is bigger than font width
+		x_center = (xstd - fonts[font_number].font_width)/2 ;
+	}
+	else x_center = 0;
+
+	if(ystd < 15) y_center = 0;
+	else y_center = ystd/3;
+	ncplane_move_yx(clockplane, y_center, x_center);
+}
+
 void*
 animation_thread (void* ){
 	while(animation_thread_on == true){
@@ -321,30 +350,9 @@ animation_thread (void* ){
 		}
 		ncplane_move_yx(clockplane, ystd/3 + 1, -30);
 	}
+	recenter();
 	pthread_exit(NULL);
 }
-
-void
-fix_offset(struct ncplane* plane, int offset){
-	ncplane_move_yx(plane, ystd/3 + 1, xstd/3);
-	ncplane_move_rel(plane, 0, offset);
-}
-
-
-typedef enum MODE {
-	CLOCK_MODE = 0,
-	STOPWATCH_MODE,
-	HELP_MODE
-} MODE;
-
-MODE PREV_MODE = CLOCK_MODE;
-MODE CUR_MODE = CLOCK_MODE;
-
-bool thread_done = false;
-static unsigned font_number = 0;
-
-
-int offset_fix_event = 1;
 
 #if defined(DEBUG_OFFSET) || defined(DEBUG_BEFORE_TWODOTS)
 
@@ -541,7 +549,6 @@ handle_input(void* arg){
 			continue;
 		}
 		if(id == 'q'){
-			/* tick_thread_done = true; */
 			if(animation_thread_on == true){ // kill all threads
 				animation_thread_on = false;
 				if(pthread_join(animation, NULL) != 0){
@@ -627,12 +634,24 @@ handle_input(void* arg){
 		if(id == NCKEY_DOWN){
 			ncplane_move_rel(clockplane, 1, 0);
 		}
+#ifdef DEBUG_MODE
+		if(id == '['){
+			font_width--;
+		}
+#else
 		if(id == NCKEY_LEFT){
 			ncplane_move_rel(clockplane, 0, -1);
 		}
+#endif
+#ifdef DEBUG_MODE
+		if(id == ']'){
+			font_width++;
+		}
+#else
 		if(id == NCKEY_RIGHT){
 			ncplane_move_rel(clockplane, 0, 1);
 		}
+#endif
 		if (id == 'l'){
 			if(color_index < SIZEOFARRAY(colors)){
 					ncplane_set_fg_rgb(clockplane, colors[color_index]);
@@ -645,6 +664,10 @@ handle_input(void* arg){
 						// gotta find a way to restore to default colors,
 				        // supposedly with notcurses_default_foreground(nc,&fg);
 						// or reset_term_attributes(ti, f); ?
+		}
+		if (id == 'd'){
+			ncplane_set_fg_default(clockplane);
+			ncplane_set_bg_default(clockplane);
 		}
 		if(id == 'h'){
 			if(CUR_MODE != HELP_MODE){
@@ -666,8 +689,7 @@ handle_input(void* arg){
 					notcurses_stop(nc);
 					exit(-1);
 				}
-				fix_offset(clockplane, 0);
-
+				recenter();
 			}
 		}
 	}
@@ -711,16 +733,17 @@ void display_help(struct ncplane* plane){
 	ncplane_putstr_yx(plane, 10, 1, "c - clock mode");
 	ncplane_putstr_yx(plane, 11, 1, "h - help menu");
 	ncplane_putstr_yx(plane, 12, 1, "⬆️ ➡️ ⬇️ ⬅️ - move the clock plane");
-
+#ifdef DEBUG_MODE
+	ncplane_putstr_yx(plane, 13, 1, "[ ] - move the marker to determine font_width for font struct constant");
+#endif
 };
 #endif
 
 void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, int minute, int second, font cur_font) {
 
-		if(offset_fix_event == 1 && xstd > 100){ // not the most elegant solution, but kinda works
-			offset_fix_event = 0;                // visually recentering clock plane whenever the font is changed or resize_cb event happens
-			/* assert(font_number <= MAXMAX_FONT_NUM); */
-			fix_offset(plane, fonts[font_number].correct_offset);
+		if(offset_fix_event == 1 ){
+			offset_fix_event = 0;
+			recenter();
 		}
 		x_offset = x_offset;
 		table[first_digit((hour))](plane, x_offset , y_center, cur_font);
@@ -742,23 +765,17 @@ void display_cloc(struct ncplane* plane, int x_offset, int y_center, int hour, i
 		table[first_digit((second))](plane, x_offset , y_center, cur_font);
 		x_offset = x_offset + cur_font.calculate_offset(first_digit(second),last_digit(second));
 		table[last_digit((second))] (plane,  x_offset , y_center, cur_font);
+
+#ifdef DEBUG_MODE
+		ncplane_putstr_yx(clockplane, 0, font_width, "|||");
+#endif
 }
 
 
 int resize_cb(struct ncplane* plane){
 	offset_fix_event = 1;
 	notcurses_stddim_yx(nc, &ystd, &xstd);
-	x_center = xstd/3 ;
-	y_center = ystd/3 + 1;
-	if( ystd > 15 && xstd > 70)
-		ncplane_move_yx(plane, y_center, x_center);
-	if(xstd < 70 )
-		ncplane_move_yx(plane, y_center, 0);
-	if( ystd < 15 && xstd > 70)
-		ncplane_move_yx(plane, 0, x_center);
-	if( ystd < 15 && xstd < 70)
-		ncplane_move_yx(plane, 0, 0);
-
+	recenter();
 	return 0;
 }
 
@@ -790,6 +807,7 @@ int main(){
 		exit(-1);
 		return -1;
 	}
+	recenter(); // set clockplane position at the beginning.
 
 	while(thread_done == false){
 		time_t t = time(NULL);
