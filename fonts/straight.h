@@ -39,9 +39,9 @@ const char* const straight_nine_0 = "  __  \n";
 const char* const straight_nine_1 = " (__\\ \n";
 const char* const straight_nine_2 = "  __/ \n";
 
-const char* const straight_twodots_0 = ". \n";
+const char* const straight_twodots_0 = "\n ";
 const char* const straight_twodots_1 = ". \n";
-const char* const straight_twodots_2 = "\n ";
+const char* const straight_twodots_2 = ". \n";
 
 const char* const font_straight[11][VEC_MAXSIZE] =
 {

@@ -49,10 +49,10 @@ const char* const slscript_nine_1 = "(__)\n";
 const char* const slscript_nine_2 = "  / \n";
 const char* const slscript_nine_3 = " /  \n";
 
-const char* const slscript_twodots_0 = "  o\n";
-const char* const slscript_twodots_1 = "\n ";
-const char* const slscript_twodots_2 = "o  \n";
-const char* const slscript_twodots_3 = "\n ";
+const char* const slscript_twodots_0 = "\n ";
+const char* const slscript_twodots_1 = "  o\n";
+const char* const slscript_twodots_2 = "\n ";
+const char* const slscript_twodots_3 = "o  \n";
 
 const char* const font_slscript[11][VEC_MAXSIZE] =
 {

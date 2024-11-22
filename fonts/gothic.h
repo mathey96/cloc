@@ -80,11 +80,11 @@ const char* const gothic_nine_5 = "   || \n";
 const char* const gothic_nine_6 = " \\_/  \n";
 
 const char* const gothic_twodots_0 = "\n";
-const char* const gothic_twodots_1 = "<> \n";
-const char* const gothic_twodots_2 = "\n ";
+const char* const gothic_twodots_1 = "\n ";
+const char* const gothic_twodots_2 = "<> \n";
 const char* const gothic_twodots_3 = "\n ";
-const char* const gothic_twodots_4 = "<> \n";
-const char* const gothic_twodots_5 = "\n ";
+const char* const gothic_twodots_4 = "\n ";
+const char* const gothic_twodots_5 = "<> \n";
 const char* const gothic_twodots_6 = "\n ";
 
 const char* const font_gothic[11][VEC_MAXSIZE] =

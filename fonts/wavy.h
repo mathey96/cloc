@@ -39,9 +39,9 @@ const char* const wavy_nine_0 = " _   \n";
 const char* const wavy_nine_1 = "(_\\  \n";
 const char* const wavy_nine_2 = "  _) \n";
 
-const char* const wavy_twodots_0 = "o \n";
+const char* const wavy_twodots_0 = "\n ";
 const char* const wavy_twodots_1 = "o \n";
-const char* const wavy_twodots_2 = "\n ";
+const char* const wavy_twodots_2 = "o \n";
 
 const char* const font_wavy[11][VEC_MAXSIZE] =
 {

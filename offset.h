@@ -3,8 +3,6 @@
 int first_digit(int num);
 int last_digit(int num);
 
-int calculate_offset2(int digit_1, int digit_2);
-
 int calculate_offset_standard(int digit_1, int digit_2);
 int offset_before_twodots_standard(int num);
 int offset_after_twodots_standard(int num_after_dots);
@@ -93,3 +91,51 @@ int offset_after_twodots_drpepper(int num) ;
 int calculate_offset_eftifont(int digit_1, int digit_2);
 int offset_before_twodots_eftifont(int num);
 int offset_after_twodots_eftifont(int num) ;
+
+int calculate_offset_fourtops(int digit_1, int digit_2);
+int offset_before_twodots_fourtops(int num);
+int offset_after_twodots_fourtops(int num);
+
+int calculate_offset_kban(int digit_1, int digit_2);
+int offset_before_twodots_kban(int num);
+int offset_after_twodots_kban(int num);
+
+int calculate_offset_serifcap(int digit_1, int digit_2);
+int offset_before_twodots_serifcap(int num);
+int offset_after_twodots_serifcap(int num);
+
+int calculate_offset_short(int digit_1, int digit_2);
+int offset_before_twodots_short(int num);
+int offset_after_twodots_short(int num);
+
+int calculate_offset_slscript(int digit_1, int digit_2);
+int offset_before_twodots_slscript(int num);
+int offset_after_twodots_slscript(int num);
+
+int calculate_offset_twopoint(int digit_1, int digit_2);
+int offset_before_twodots_twopoint(int num);
+int offset_after_twodots_twopoint(int num);
+
+int calculate_offset_usaflag(int digit_1, int digit_2);
+int offset_before_twodots_usaflag(int num);
+int offset_after_twodots_usaflag(int num);
+
+int calculate_offset_wavy(int digit_1, int digit_2);
+int offset_before_twodots_wavy(int num);
+int offset_after_twodots_wavy(int num);
+
+int calculate_offset_straight(int digit_1, int digit_2);
+int offset_before_twodots_straight(int num);
+int offset_after_twodots_straight(int num);
+
+int calculate_offset_weird(int digit_1, int digit_2);
+int offset_before_twodots_weird(int num);
+int offset_after_twodots_weird(int num);
+
+int calculate_offset_thin(int digit_1, int digit_2);
+int offset_before_twodots_thin(int num);
+int offset_after_twodots_thin(int num);
+
+int calculate_offset_gothic(int digit_1, int digit_2);
+int offset_before_twodots_gothic(int num);
+int offset_after_twodots_gothic(int num);

@@ -8,12 +8,12 @@ set(CMAKE_C_STANDARD_REQUIRED True)
 # Define source files for different targets
 set(SOURCES_TARGET1
     main.c
-    helpers.c
+    offset.c
 )
 
 set(SOURCES_TARGET2
     main.c
-    helpers.c
+    offset.c
 )
 
 
