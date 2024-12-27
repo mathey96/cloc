@@ -341,14 +341,14 @@ void recenter(){
 void*
 animation_thread (void* ){
 	while(animation_thread_on == true){
-		ncplane_move_yx(clockplane, ystd/3 + 1, -15);
+		ncplane_move_yx(clockplane, ystd/3, -15);
 		for (int i = 0; i < 200; i++){
 			if( animation_thread_on == false)
 				pthread_exit(NULL);
 			usleep(20000);
 			ncplane_move_rel(clockplane, 0, 1);
 		}
-		ncplane_move_yx(clockplane, ystd/3 + 1, -30);
+		ncplane_move_yx(clockplane, ystd/3, -30);
 	}
 	recenter();
 	pthread_exit(NULL);
@@ -367,7 +367,7 @@ handle_input(void* arg){
 	uint32_t id;
 
 	while((id = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){
-		if(id == 0){
+		if(ni.evtype == NCTYPE_RELEASE){
 			continue;
 		}
 		if(id == 'q'){
@@ -530,7 +530,6 @@ handle_input(void* arg){
 		fclose(fp);
 		}
 	  }
-
 	}
 }
 
@@ -545,7 +544,7 @@ handle_input(void* arg){
 	uint32_t id;
 
 	while((id = notcurses_get_blocking(nc, &ni)) != (uint32_t)-1){
-		if(id == 0){
+		if(ni.evtype == NCTYPE_RELEASE){
 			continue;
 		}
 		if(id == 'q'){
@@ -791,7 +790,7 @@ int main(){
 
 	notcurses_stddim_yx(nc, &ystd, &xstd);
 	struct ncplane_options nopts = {
-		.y = ystd/3 +1,
+		.y = ystd/3,
 		.x = xstd/3 +1,
 		.rows = 150,
 		.cols = 150,
