@@ -728,10 +728,12 @@ void display_help(struct ncplane* plane){
 	ncplane_putstr_yx(plane, 6, 1, "p - to change to previous font \n");
 	ncplane_putstr_yx(plane, 7, 1, "s - stopwatch mode");
 	ncplane_putstr_yx(plane, 8, 1, "r - reset stopwatch");
-	ncplane_putstr_yx(plane, 9, 1, "SPACE - pause stopwatch");
-	ncplane_putstr_yx(plane, 10, 1, "c - clock mode");
-	ncplane_putstr_yx(plane, 11, 1, "h - help menu");
-	ncplane_putstr_yx(plane, 12, 1, "⬆️ ➡️ ⬇️ ⬅️ - move the clock plane");
+	ncplane_putstr_yx(plane, 9, 1, "l - change color");
+	ncplane_putstr_yx(plane, 10, 1, "a - animation");
+	ncplane_putstr_yx(plane, 11, 1, "SPACE - pause stopwatch");
+	ncplane_putstr_yx(plane, 12, 1, "c - clock mode");
+	ncplane_putstr_yx(plane, 13, 1, "h - help menu");
+	ncplane_putstr_yx(plane, 14, 1, "⬆️ ➡️ ⬇️ ⬅️ - move the clock plane");
 #ifdef DEBUG_MODE
 	ncplane_putstr_yx(plane, 13, 1, "[ ] - move the marker to determine font_width for font struct constant");
 #endif
